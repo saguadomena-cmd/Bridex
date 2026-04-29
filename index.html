@@ -38,7 +38,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:62px;display:flex;ali
 .nav-menu{display:flex;gap:2px;list-style:none;}
 .nav-menu a{font-size:13px;font-weight:500;color:var(--text3);text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .2s;letter-spacing:.2px;}
 .nav-menu a:hover{color:var(--text);background:var(--bg3);}
-.nav-right{display:flex;gap:8px;}
+.nav-right{display:flex;align-items:center;gap:8px;}
+
+/* LANGUAGE SWITCHER */
+.lang-sw{position:relative;}
+.lang-btn{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:6px 11px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);transition:all .2s;white-space:nowrap;}
+.lang-btn:hover{border-color:var(--gold-bdr);color:var(--gold);}
+.lang-flag{font-size:14px;line-height:1;}
+.lang-code{letter-spacing:.5px;}
+.lang-chev{font-size:8px;color:var(--text3);transition:transform .2s;}
+.lang-btn.open .lang-chev{transform:rotate(180deg);}
+.lang-dd{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.7);z-index:999;min-width:210px;display:none;}
+.lang-dd.open{display:block;animation:fadeUp .15s ease both;}
+.lang-group{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;padding:10px 14px 5px;}
+.lang-opt{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background .15s;font-size:13px;color:var(--text2);}
+.lang-opt:hover{background:var(--bg3);color:var(--text);}
+.lang-opt.active{background:var(--gold-dim);color:var(--gold);}
+.lang-opt-flag{font-size:16px;width:22px;text-align:center;}
+.lang-opt-name{flex:1;font-weight:500;}
+.lang-opt-native{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.lang-opt.active .lang-opt-native{color:var(--gold-dk);}
+.lang-sep{height:1px;background:var(--border);}
 .btn-s{padding:7px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.2px;}
 .btn-border{background:transparent;border:1px solid var(--bg4);color:var(--text2);}
 .btn-border:hover{border-color:var(--gold-bdr);color:var(--gold);}
@@ -255,9 +275,43 @@ footer{padding:22px 40px;border-top:1px solid var(--border);display:flex;align-i
     <li><a href="#regulation">Regulation</a></li>
   </ul>
   <div class="nav-right">
-    <button class="btn-s btn-border">Log In</button>
-    <a href="bridex_whitelist.html" style="text-decoration:none;"><button class="btn-s" style="background:transparent;border:1px solid var(--gold-bdr);color:var(--gold);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;padding:7px 18px;border-radius:6px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.background='var(--gold-dim)'" onmouseout="this.style.background='transparent'"><span style="width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite;display:inline-block;"></span> Whitelist</button></a>
-    <button class="btn-s btn-fill">Launch App</button>
+    <button class="btn-s btn-border" data-i18n="login">Log In</button>
+    <a href="bridex_whitelist.html" style="text-decoration:none;">
+      <button class="btn-s" style="background:transparent;border:1px solid var(--gold-bdr);color:var(--gold);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;padding:7px 18px;border-radius:6px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.background='var(--gold-dim)'" onmouseout="this.style.background='transparent'">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite;display:inline-block;"></span>
+        <span data-i18n="whitelist_btn">Whitelist</span>
+      </button>
+    </a>
+    <button class="btn-s btn-fill" data-i18n="launch">Launch App</button>
+    <div class="lang-sw" id="lang-sw">
+      <button class="lang-btn" id="lang-btn" onclick="toggleLangMenu(event)">
+        <span class="lang-flag" id="lf">🇬🇧</span>
+        <span class="lang-code" id="lc">EN</span>
+        <span class="lang-chev">▼</span>
+      </button>
+      <div class="lang-dd" id="lang-dd">
+        <div class="lang-group">Popular</div>
+        <div class="lang-opt active" onclick="setL('en',event)"><span class="lang-opt-flag">🇬🇧</span><span class="lang-opt-name">English</span><span class="lang-opt-native">English</span></div>
+        <div class="lang-opt" onclick="setL('es',event)"><span class="lang-opt-flag">🇪🇸</span><span class="lang-opt-name">Spanish</span><span class="lang-opt-native">Español</span></div>
+        <div class="lang-opt" onclick="setL('zh',event)"><span class="lang-opt-flag">🇨🇳</span><span class="lang-opt-name">Chinese</span><span class="lang-opt-native">中文</span></div>
+        <div class="lang-opt" onclick="setL('ar',event)"><span class="lang-opt-flag">🇸🇦</span><span class="lang-opt-name">Arabic</span><span class="lang-opt-native">العربية</span></div>
+        <div class="lang-opt" onclick="setL('pt',event)"><span class="lang-opt-flag">🇧🇷</span><span class="lang-opt-name">Portuguese</span><span class="lang-opt-native">Português</span></div>
+        <div class="lang-opt" onclick="setL('ru',event)"><span class="lang-opt-flag">🇷🇺</span><span class="lang-opt-name">Russian</span><span class="lang-opt-native">Русский</span></div>
+        <div class="lang-sep"></div>
+        <div class="lang-group">Europe</div>
+        <div class="lang-opt" onclick="setL('de',event)"><span class="lang-opt-flag">🇩🇪</span><span class="lang-opt-name">German</span><span class="lang-opt-native">Deutsch</span></div>
+        <div class="lang-opt" onclick="setL('fr',event)"><span class="lang-opt-flag">🇫🇷</span><span class="lang-opt-name">French</span><span class="lang-opt-native">Français</span></div>
+        <div class="lang-opt" onclick="setL('it',event)"><span class="lang-opt-flag">🇮🇹</span><span class="lang-opt-name">Italian</span><span class="lang-opt-native">Italiano</span></div>
+        <div class="lang-opt" onclick="setL('tr',event)"><span class="lang-opt-flag">🇹🇷</span><span class="lang-opt-name">Turkish</span><span class="lang-opt-native">Türkçe</span></div>
+        <div class="lang-opt" onclick="setL('pl',event)"><span class="lang-opt-flag">🇵🇱</span><span class="lang-opt-name">Polish</span><span class="lang-opt-native">Polski</span></div>
+        <div class="lang-sep"></div>
+        <div class="lang-group">Asia</div>
+        <div class="lang-opt" onclick="setL('ja',event)"><span class="lang-opt-flag">🇯🇵</span><span class="lang-opt-name">Japanese</span><span class="lang-opt-native">日本語</span></div>
+        <div class="lang-opt" onclick="setL('ko',event)"><span class="lang-opt-flag">🇰🇷</span><span class="lang-opt-name">Korean</span><span class="lang-opt-native">한국어</span></div>
+        <div class="lang-opt" onclick="setL('vi',event)"><span class="lang-opt-flag">🇻🇳</span><span class="lang-opt-name">Vietnamese</span><span class="lang-opt-native">Tiếng Việt</span></div>
+        <div class="lang-opt" onclick="setL('id',event)"><span class="lang-opt-flag">🇮🇩</span><span class="lang-opt-name">Indonesian</span><span class="lang-opt-native">Bahasa Indonesia</span></div>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -651,11 +705,630 @@ footer{padding:22px 40px;border-top:1px solid var(--border);display:flex;align-i
   </div>
 </div>
 
+
+<!-- JOIN THE TEAM -->
+<div style="background:var(--bg);border-top:1px solid var(--border);padding:80px 40px;position:relative;z-index:1;">
+  <div style="max-width:1300px;margin:0 auto;">
+
+    <div style="text-align:center;margin-bottom:48px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Join the project</div>
+      <h2 style="font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1px;line-height:1.05;margin-bottom:14px;">Build BRIDEX with us.</h2>
+      <p style="font-size:14px;color:var(--text2);max-width:520px;margin:0 auto;line-height:1.8;">We are assembling the team that will tokenize real estate globally. Whether you are a developer, a real estate professional or a builder — there is a place for you at BRIDEX.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;">
+
+      <!-- DEV CARD -->
+      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px;transition:border-color .2s;cursor:pointer;" onmouseover="this.style.borderColor='var(--gold-bdr)'" onmouseout="this.style.borderColor='var(--border2)'" onclick="openModal('dev')">
+        <div style="width:44px;height:44px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#4A9EFF" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Developers & Tech</div>
+        <div style="font-size:13px;color:var(--text3);line-height:1.7;margin-bottom:20px;">Web3 engineers, XRPL specialists, frontend developers, smart contract auditors. If you build things that matter, we want to talk.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:rgba(74,158,255,.08);color:#4A9EFF;border:1px solid rgba(74,158,255,.18);">XRPL Dev</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:rgba(74,158,255,.08);color:#4A9EFF;border:1px solid rgba(74,158,255,.18);">Smart Contracts</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:rgba(74,158,255,.08);color:#4A9EFF;border:1px solid rgba(74,158,255,.18);">Frontend Web3</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:rgba(74,158,255,.08);color:#4A9EFF;border:1px solid rgba(74,158,255,.18);">Security / Audit</span>
+        </div>
+        <button onclick="openModal('dev')" style="width:100%;background:rgba(74,158,255,.08);border:1px solid rgba(74,158,255,.2);color:#4A9EFF;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.3px;" onmouseover="this.style.background='rgba(74,158,255,.15)'" onmouseout="this.style.background='rgba(74,158,255,.08)'">
+          Apply as Developer →
+        </button>
+      </div>
+
+      <!-- REAL ESTATE CARD -->
+      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px;transition:border-color .2s;cursor:pointer;" onmouseover="this.style.borderColor='var(--gold-bdr)'" onmouseout="this.style.borderColor='var(--border2)'" onclick="openModal('re')">
+        <div style="width:44px;height:44px;background:var(--gold-dim);border:1px solid var(--gold-bdr);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#F3BA2F" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        </div>
+        <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Real Estate & Builders</div>
+        <div style="font-size:13px;color:var(--text3);line-height:1.7;margin-bottom:20px;">Property developers, real estate agents, promoters, construction companies. Bring your assets — we provide the tokenization infrastructure.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-bdr);">Developer</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-bdr);">Promotor</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-bdr);">Construction</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-bdr);">Real Estate Agent</span>
+        </div>
+        <button onclick="openModal('re')" style="width:100%;background:var(--gold-dim);border:1px solid var(--gold-bdr);color:var(--gold);border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.3px;" onmouseover="this.style.background='rgba(243,186,47,.15)'" onmouseout="this.style.background='var(--gold-dim)'">
+          Contact as Property Professional →
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── MODALS ── -->
+<div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:9998;"></div>
+
+<!-- DEV MODAL -->
+<div id="modal-dev" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:min(600px,95vw);max-height:90vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--border2);border-radius:18px;box-shadow:0 40px 120px rgba(0,0,0,.8);">
+  <div style="background:var(--bg3);padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;border-radius:18px 18px 0 0;position:sticky;top:0;z-index:1;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#4A9EFF;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">Open positions</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text);">Apply as Developer / Tech</div>
+    </div>
+    <button onclick="closeModal()" style="background:var(--bg4);border:none;color:var(--text3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕</button>
+  </div>
+  <div style="padding:28px 24px;">
+    <div style="background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:10px;padding:14px 16px;margin-bottom:24px;font-size:12px;color:#4A9EFF;line-height:1.6;">
+      We offer equity participation through BRIK tokens (team allocation pool). No fixed salary until IDO — but if this succeeds, you will have been part of it from the start.
+    </div>
+    <form id="form-dev" onsubmit="submitForm(event,'dev')">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Full name *</label>
+          <input required type="text" name="name" placeholder="Your name" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Email *</label>
+          <input required type="email" name="email" placeholder="your@email.com" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Role / specialization *</label>
+        <select required name="role" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;cursor:pointer;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+          <option value="">Select your role</option>
+          <option>XRPL / Blockchain Developer</option>
+          <option>Smart Contract Engineer</option>
+          <option>Frontend Developer (Web3)</option>
+          <option>Full Stack Developer</option>
+          <option>Security Auditor</option>
+          <option>DevOps / Infrastructure</option>
+          <option>Product Manager</option>
+          <option>UX / UI Designer</option>
+          <option>Community Manager</option>
+          <option>Legal / Compliance</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Experience</label>
+          <select name="exp" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;cursor:pointer;">
+            <option>1-2 years</option>
+            <option>3-5 years</option>
+            <option>5-10 years</option>
+            <option>10+ years</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Availability</label>
+          <select name="avail" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;cursor:pointer;">
+            <option>Full time</option>
+            <option>Part time</option>
+            <option>Freelance / project</option>
+            <option>Advisory only</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">GitHub / Portfolio / LinkedIn</label>
+        <input type="url" name="portfolio" placeholder="https://github.com/yourprofile" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Why BRIDEX? Tell us about yourself *</label>
+        <textarea required name="message" rows="4" placeholder="Tell us about your experience, what you can bring to BRIDEX, and why you want to be part of this project..." style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Attach CV / Resume (PDF, max 5MB)</label>
+        <div id="drop-dev" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event,'dev')" style="border:2px dashed var(--border2);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('file-dev').click()" onmouseover="this.style.borderColor='var(--gold-bdr)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="font-size:24px;margin-bottom:6px;">📎</div>
+          <div style="font-size:12px;color:var(--text3);">Drag & drop your CV here or <span style="color:var(--gold);">click to browse</span></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">PDF, DOC, DOCX — max 5MB</div>
+          <div id="file-dev-name" style="font-size:11px;color:var(--green);margin-top:8px;display:none;"></div>
+        </div>
+        <input type="file" id="file-dev" accept=".pdf,.doc,.docx" style="display:none;" onchange="fileSelected(this,'dev')">
+      </div>
+      <button type="submit" style="width:100%;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.25);color:#4A9EFF;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.background='rgba(74,158,255,.18)'" onmouseout="this.style.background='rgba(74,158,255,.1)'">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Send Application
+      </button>
+    </form>
+    <div id="success-dev" style="display:none;text-align:center;padding:32px 0;">
+      <div style="font-size:48px;margin-bottom:16px;">✅</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Application received!</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">Thank you for your interest in joining BRIDEX. We will review your application and get back to you within 5 business days.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RE MODAL -->
+<div id="modal-re" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:min(600px,95vw);max-height:90vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--border2);border-radius:18px;box-shadow:0 40px 120px rgba(0,0,0,.8);">
+  <div style="background:var(--bg3);padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;border-radius:18px 18px 0 0;position:sticky;top:0;z-index:1;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">Property professionals</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text);">Partner with BRIDEX</div>
+    </div>
+    <button onclick="closeModal()" style="background:var(--bg4);border:none;color:var(--text3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕</button>
+  </div>
+  <div style="padding:28px 24px;">
+    <div style="background:var(--gold-dim);border:1px solid var(--gold-bdr);border-radius:10px;padding:14px 16px;margin-bottom:24px;font-size:12px;color:var(--gold);line-height:1.6;">
+      Tokenize your properties on BRIDEX and access a global pool of investors. We handle the blockchain infrastructure — you bring the assets.
+    </div>
+    <form id="form-re" onsubmit="submitForm(event,'re')">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Full name *</label>
+          <input required type="text" name="name" placeholder="Your name" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Email *</label>
+          <input required type="email" name="email" placeholder="your@email.com" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Company / Project name</label>
+          <input type="text" name="company" placeholder="Your company" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Phone / WhatsApp</label>
+          <input type="tel" name="phone" placeholder="+34 600 000 000" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Professional profile *</label>
+        <select required name="profile" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;cursor:pointer;">
+          <option value="">Select your profile</option>
+          <option>Real Estate Developer / Promotor</option>
+          <option>Construction Company</option>
+          <option>Real Estate Agent / Broker</option>
+          <option>Property Investor / Fund</option>
+          <option>Architect / Project Manager</option>
+          <option>Legal / Notary</option>
+          <option>Property Manager</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Country of operation</label>
+          <input type="text" name="country" placeholder="Spain, Mexico, UAE..." style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Estimated asset value</label>
+          <select name="value" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;cursor:pointer;">
+            <option>Under 500K EUR</option>
+            <option>500K – 2M EUR</option>
+            <option>2M – 10M EUR</option>
+            <option>10M – 50M EUR</option>
+            <option>Over 50M EUR</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Describe your project / assets *</label>
+        <textarea required name="message" rows="4" placeholder="Tell us about the properties you want to tokenize, their location, current status (finished, in development), and what you expect from the partnership..." style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='var(--gold-bdr)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Attach documentation (optional)</label>
+        <div id="drop-re" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event,'re')" style="border:2px dashed var(--border2);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('file-re').click()" onmouseover="this.style.borderColor='var(--gold-bdr)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="font-size:24px;margin-bottom:6px;">📄</div>
+          <div style="font-size:12px;color:var(--text3);">Drag & drop documents or <span style="color:var(--gold);">click to browse</span></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">Brochure, plans, portfolio, CV — PDF, max 5MB</div>
+          <div id="file-re-name" style="font-size:11px;color:var(--green);margin-top:8px;display:none;"></div>
+        </div>
+        <input type="file" id="file-re" accept=".pdf,.doc,.docx,.jpg,.png" style="display:none;" onchange="fileSelected(this,'re')">
+      </div>
+      <button type="submit" style="width:100%;background:var(--gold);border:none;color:var(--bg);border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.background='var(--gold-lt)'" onmouseout="this.style.background='var(--gold)'">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Send Proposal
+      </button>
+    </form>
+    <div id="success-re" style="display:none;text-align:center;padding:32px 0;">
+      <div style="font-size:48px;margin-bottom:16px;">🏗️</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Proposal received!</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">Thank you for your interest in partnering with BRIDEX. Our team will review your proposal and contact you within 3 business days to discuss next steps.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(type){
+  document.getElementById('modal-overlay').style.display='block';
+  document.getElementById('modal-'+type).style.display='block';
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal-overlay').style.display='none';
+  document.querySelectorAll('[id^="modal-"]').forEach(m=>m.style.display='none');
+  document.body.style.overflow='';
+}
+function dragOver(e){e.preventDefault();e.currentTarget.style.borderColor='var(--gold-bdr)';}
+function dragLeave(e){e.currentTarget.style.borderColor='var(--border2)';}
+function dropFile(e,type){
+  e.preventDefault();
+  const file=e.dataTransfer.files[0];
+  if(file)showFile(file,type);
+}
+function fileSelected(input,type){
+  if(input.files[0])showFile(input.files[0],type);
+}
+function showFile(file,type){
+  const el=document.getElementById('file-'+type+'-name');
+  el.textContent='📎 '+file.name+' ('+Math.round(file.size/1024)+'KB)';
+  el.style.display='block';
+  document.getElementById('drop-'+type).style.borderColor='var(--green)';
+}
+function submitForm(e,type){
+  e.preventDefault();
+  const form=document.getElementById('form-'+type);
+  const btn=form.querySelector('button[type="submit"]');
+  btn.textContent='Sending...';
+  btn.disabled=true;
+  setTimeout(()=>{
+    form.style.display='none';
+    document.getElementById('success-'+type).style.display='block';
+  },1200);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+
 <footer>
   <div class="f-logo"><b>BRID</b>EX</div>
   <div class="f-copy">© 2026 BRIDEX · BRIK Token · Real Estate on XRP Ledger · Built for the rules that are coming.</div>
   <div class="f-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Whitepaper</a><a href="#">Contact</a></div>
 </footer>
 
+
+<script>
+// ── BRIDEX LANDING — MULTILINGUAL SYSTEM ─────────────────
+const LL = {
+  en:{flag:'🇬🇧',code:'EN',dir:'ltr',
+    login:'Log In', launch:'Launch App', whitelist_btn:'Whitelist',
+    nav_platform:'Platform', nav_how:'How it works', nav_token:'Token BRIK', nav_roadmap:'Roadmap', nav_regulation:'Regulation',
+    hero_eyebrow:'Built for the rules that are coming',
+    hero_h1:'The future of<br>real estate is<br><span class="acc">on-chain.</span>',
+    hero_mono:'BRIDEX · BRIK TOKEN · XRP LEDGER',
+    hero_p:'Tokenize, invest and trade <strong>fractional real estate</strong> globally — with integrated KYC/AML, SPV legal structures, and automatic rental distribution. <strong>Designed from day one for the regulation that is already arriving.</strong>',
+    btn_launch:'Launch App', btn_whitepaper:'Read Whitepaper',
+    kpi1_l:'BRIK fixed supply', kpi2_l:'IDO launch price', kpi3_l:'Min. investment', kpi4_l:'Compliance ready',
+    opp1_title:'Real estate tokenization by 2035', opp1_desc:'The global tokenized real estate market is projected to reach $4 trillion by 2035. Early platforms that are compliance-ready will capture the majority of this market.',
+    opp2_title:'Of real estate is not yet tokenized', opp2_desc:'The global real estate market exceeds $326 trillion. Only 2% is currently digitized. BRIDEX is positioned at the frontier of the largest untapped market in crypto.',
+    opp3_title:'Minimum investment in any property', opp3_desc:'BRIDEX opens real estate investment to everyone. From a studio in Valencia to a commercial tower in Dubai — start building your property portfolio from just 100 EUR.',
+    reg_eyebrow:'Our core message',
+    reg_h2:'We are not waiting<br>for regulation.<br><span style="color:var(--gold)">We are building it.</span>',
+    reg_desc:'Most crypto projects run from regulation. BRIDEX runs toward it. We have built the infrastructure that future laws will require — before they exist. This is not a risk. This is our biggest competitive advantage.',
+    reg_quote:'"You are entering a space that is not yet fully regulated — but the laws <strong>are already arriving</strong>, and BRIDEX will already be compliant when that day comes."',
+    how_eyebrow:'End-to-end lifecycle',
+    how_h2:'From property to<br>token in minutes.',
+    how_desc:'BRIDEX covers the full tokenization lifecycle — from legal structuring to investor onboarding and automatic rental distribution.',
+    asset_eyebrow:'Asset types',
+    asset_h2:'Any property.<br>Any country.',
+    asset_desc:'BRIDEX tokenizes all types of real estate — residential, commercial, and development projects — from any jurisdiction in the world.',
+    tok_eyebrow:'Tokenomics',
+    tok_h2:'Built for real value.',
+    tok_desc:'Fixed supply. Zero inflation. Every BRIK token backed by the BRIDEX real estate ecosystem on XRP Ledger.',
+    road_eyebrow:'Roadmap',
+    road_h2:'Building the future.<br>One BRIK at a time.',
+    road_desc:'From token genesis to a global compliant real estate ecosystem — step by step, brick by brick.',
+    why_eyebrow:'Why XRP Ledger',
+    why_h2:'The fastest foundation<br>for real-world assets.',
+    why_desc:'We chose XRPL because real estate demands speed, low cost and rock-solid reliability.',
+    cta_badge:'Whitelist now open',
+    cta_h2:'Own your first<br><span class="acc">BRIK today.</span>',
+    cta_desc:'Be part of the first generation to own real estate on-chain — built for the regulatory future that is already arriving.',
+    cta_wl_title:'IDO Whitelist — Open now',
+    cta_wl_desc:'Register your XRPL wallet and secure your position before the IDO launch. Your wallet will be publicly listed in masked form — verifiable by any user.',
+    cta_wl_sub:'First-come, first-served. No commitment required until KYC at IDO launch.',
+    btn_join_wl:'Join Whitelist', btn_view_wl:'View Public List',
+    follow_x:'Follow on X', telegram:'Telegram', discord:'Discord', whitepaper:'Whitepaper',
+    footer_copy:'© 2026 BRIDEX · BRIK Token · Real Estate on XRP Ledger · Built for the rules that are coming.',
+    terms:'Terms', privacy:'Privacy',
+  },
+  es:{flag:'🇪🇸',code:'ES',dir:'ltr',
+    login:'Iniciar sesión', launch:'Lanzar App', whitelist_btn:'Lista Blanca',
+    nav_platform:'Plataforma', nav_how:'Cómo funciona', nav_token:'Token BRIK', nav_roadmap:'Hoja de ruta', nav_regulation:'Regulación',
+    hero_eyebrow:'Construido para las reglas que están llegando',
+    hero_h1:'El futuro del<br>inmobiliario es<br><span class="acc">on-chain.</span>',
+    hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',
+    hero_p:'Tokeniza, invierte y negocia <strong>inmuebles fraccionados</strong> a nivel global — con KYC/AML integrado, estructuras legales SPV y distribución automática de rentas. <strong>Diseñado desde el primer día para la regulación que ya está llegando.</strong>',
+    btn_launch:'Lanzar App', btn_whitepaper:'Leer Whitepaper',
+    kpi1_l:'Supply fijo de BRIK', kpi2_l:'Precio IDO', kpi3_l:'Inversión mínima', kpi4_l:'Listo para MiCA',
+    opp1_title:'Tokenización inmobiliaria para 2035', opp1_desc:'Se proyecta que el mercado global de inmuebles tokenizados alcanzará 4 billones de dólares en 2035. Las plataformas con compliance listo capturarán la mayor parte.',
+    opp2_title:'De los inmuebles aún no está tokenizado', opp2_desc:'El mercado inmobiliario global supera los 326 billones de dólares. Solo el 2% está digitalizado. BRIDEX está en la frontera del mayor mercado sin explotar en crypto.',
+    opp3_title:'Inversión mínima en cualquier propiedad', opp3_desc:'BRIDEX abre la inversión inmobiliaria a todos. Desde un estudio en Valencia hasta una torre en Dubai — construye tu cartera desde solo 100 EUR.',
+    reg_eyebrow:'Nuestro mensaje central',
+    reg_h2:'No esperamos<br>la regulación.<br><span style="color:var(--gold)">La estamos construyendo.</span>',
+    reg_desc:'La mayoría de proyectos crypto huyen de la regulación. BRIDEX corre hacia ella. Hemos construido la infraestructura que las leyes futuras requerirán — antes de que existan.',
+    reg_quote:'"Estás entrando en un espacio que aún no está completamente regulado — pero las leyes <strong>ya están llegando</strong>, y BRIDEX ya estará en compliance cuando ese día llegue."',
+    how_eyebrow:'Ciclo de vida completo',
+    how_h2:'De propiedad a<br>token en minutos.',
+    how_desc:'BRIDEX cubre el ciclo completo de tokenización — desde la estructura legal hasta la incorporación de inversores y la distribución automática de rentas.',
+    asset_eyebrow:'Tipos de activos',
+    asset_h2:'Cualquier propiedad.<br>Cualquier país.',
+    asset_desc:'BRIDEX tokeniza todo tipo de inmuebles — residencial, comercial y proyectos de desarrollo — en cualquier jurisdicción del mundo.',
+    tok_eyebrow:'Tokenomics',
+    tok_h2:'Construido para el valor real.',
+    tok_desc:'Supply fijo. Inflación cero. Cada token BRIK respaldado por el ecosistema inmobiliario real de BRIDEX en XRP Ledger.',
+    road_eyebrow:'Hoja de ruta',
+    road_h2:'Construyendo el futuro.<br>Un BRIK a la vez.',
+    road_desc:'Desde el génesis del token hasta un ecosistema inmobiliario global y cumplidor — paso a paso, ladrillo a ladrillo.',
+    why_eyebrow:'Por qué XRP Ledger',
+    why_h2:'La base más rápida<br>para activos del mundo real.',
+    why_desc:'Elegimos XRPL porque el sector inmobiliario exige velocidad, bajo coste y fiabilidad absoluta.',
+    cta_badge:'Lista Blanca abierta ahora',
+    cta_h2:'Compra tu primer<br><span class="acc">BRIK hoy.</span>',
+    cta_desc:'Sé parte de la primera generación que posee inmuebles on-chain — construido para el futuro regulatorio que ya está llegando.',
+    cta_wl_title:'IDO Lista Blanca — Abierta ahora',
+    cta_wl_desc:'Registra tu cartera XRPL y asegura tu posición antes del lanzamiento del IDO.',
+    cta_wl_sub:'Primero en llegar, primero en ser atendido. Sin compromiso hasta el KYC en el IDO.',
+    btn_join_wl:'Unirse a Lista Blanca', btn_view_wl:'Ver Lista Pública',
+    follow_x:'Seguir en X', telegram:'Telegram', discord:'Discord', whitepaper:'Whitepaper',
+    footer_copy:'© 2026 BRIDEX · Token BRIK · Inmuebles en XRP Ledger · Construido para las reglas que están llegando.',
+    terms:'Términos', privacy:'Privacidad',
+  },
+  zh:{flag:'🇨🇳',code:'中文',dir:'ltr',
+    login:'登录', launch:'启动应用', whitelist_btn:'白名单',
+    nav_platform:'平台', nav_how:'如何运作', nav_token:'BRIK 代币', nav_roadmap:'路线图', nav_regulation:'监管',
+    hero_eyebrow:'为即将到来的规则而建',
+    hero_h1:'房地产的未来<br>在<span class="acc">链上。</span>',
+    hero_mono:'BRIDEX · BRIK 代币 · XRP 账本',
+    hero_p:'在全球范围内代币化、投资和交易<strong>房地产分数所有权</strong> — 集成KYC/AML、SPV法律结构和自动租金分配。<strong>从第一天起就为已经到来的监管而设计。</strong>',
+    btn_launch:'启动应用', btn_whitepaper:'阅读白皮书',
+    kpi1_l:'BRIK 固定供应量', kpi2_l:'IDO 发行价格', kpi3_l:'最低投资额', kpi4_l:'MiCA 就绪',
+    opp1_title:'2035年房地产代币化规模', opp1_desc:'预计全球代币化房地产市场到2035年将达到4万亿美元。合规就绪的早期平台将占据市场主导地位。',
+    opp2_title:'的房地产尚未代币化', opp2_desc:'全球房地产市场超过326万亿美元，目前仅有2%已数字化。BRIDEX处于加密货币中最大未开发市场的前沿。',
+    opp3_title:'任何房产的最低投资额', opp3_desc:'BRIDEX向所有人开放房地产投资。从巴伦西亚的单间公寓到迪拜的商业大厦 — 只需100欧元即可开始构建您的房产投资组合。',
+    reg_eyebrow:'我们的核心信息',
+    reg_h2:'我们不是在等待<br>监管。<br><span style="color:var(--gold)">我们正在构建它。</span>',
+    reg_desc:'大多数加密项目逃避监管。BRIDEX迎向监管。我们在法律要求出现之前就已构建了未来法律所需的基础设施。',
+    reg_quote:'"您正在进入一个尚未完全监管的领域 — 但法律<strong>已经到来</strong>，而BRIDEX届时将已经合规。"',
+    how_eyebrow:'端到端生命周期',
+    how_h2:'从房产到<br>代币只需几分钟。',
+    how_desc:'BRIDEX涵盖完整的代币化生命周期 — 从法律架构到投资者入驻和自动租金分配。',
+    asset_eyebrow:'资产类型',
+    asset_h2:'任何房产。<br>任何国家。',
+    asset_desc:'BRIDEX代币化所有类型的房地产 — 住宅、商业和开发项目 — 来自全球任何司法管辖区。',
+    tok_eyebrow:'代币经济学',
+    tok_h2:'为真实价值而建。',
+    tok_desc:'固定供应。零通胀。每个BRIK代币均由XRP Ledger上的BRIDEX房地产生态系统支撑。',
+    road_eyebrow:'路线图',
+    road_h2:'构建未来。<br>一次一个BRIK。',
+    road_desc:'从代币创世到全球合规房地产生态系统 — 一步一步，一砖一瓦。',
+    why_eyebrow:'为什么选择XRP Ledger',
+    why_h2:'现实世界资产<br>最快的基础设施。',
+    why_desc:'我们选择XRPL是因为房地产需要速度、低成本和坚如磐石的可靠性。',
+    cta_badge:'白名单现已开放',
+    cta_h2:'今天购买您的<br><span class="acc">第一个BRIK。</span>',
+    cta_desc:'成为第一批在链上拥有房地产的一代 — 为已经到来的监管未来而建。',
+    cta_wl_title:'IDO 白名单 — 现已开放',
+    cta_wl_desc:'注册您的XRPL钱包，在IDO发行前确保您的位置。',
+    cta_wl_sub:'先到先得。IDO发行时完成KYC前无需承诺。',
+    btn_join_wl:'加入白名单', btn_view_wl:'查看公开名单',
+    follow_x:'在X上关注', telegram:'Telegram', discord:'Discord', whitepaper:'白皮书',
+    footer_copy:'© 2026 BRIDEX · BRIK代币 · XRP账本上的房地产',
+    terms:'条款', privacy:'隐私',
+  },
+  ar:{flag:'🇸🇦',code:'AR',dir:'rtl',
+    login:'تسجيل الدخول', launch:'تشغيل التطبيق', whitelist_btn:'القائمة البيضاء',
+    nav_platform:'المنصة', nav_how:'كيف يعمل', nav_token:'رمز BRIK', nav_roadmap:'خارطة الطريق', nav_regulation:'التنظيم',
+    hero_eyebrow:'مبني للقواعد القادمة',
+    hero_h1:'مستقبل العقارات<br>هو<br><span class="acc">على السلسلة.</span>',
+    hero_mono:'BRIDEX · رمز BRIK · XRP LEDGER',
+    hero_p:'رمّز واستثمر وتداول <strong>ملكية العقارات الجزئية</strong> عالمياً — مع KYC/AML المدمج وهياكل SPV القانونية وتوزيع الإيجارات التلقائي.',
+    btn_launch:'تشغيل التطبيق', btn_whitepaper:'قراءة الورقة البيضاء',
+    kpi1_l:'إجمالي عرض BRIK', kpi2_l:'سعر IDO', kpi3_l:'الحد الأدنى للاستثمار', kpi4_l:'جاهز لـ MiCA',
+    opp1_title:'توكنة العقارات بحلول 2035', opp1_desc:'من المتوقع أن يصل سوق العقارات المرمّزة عالمياً إلى 4 تريليون دولار بحلول 2035.',
+    opp2_title:'من العقارات لم يُرمَّز بعد', opp2_desc:'يتجاوز سوق العقارات العالمي 326 تريليون دولار. 2% فقط رقمي حتى الآن.',
+    opp3_title:'الحد الأدنى للاستثمار في أي عقار', opp3_desc:'يفتح BRIDEX الاستثمار العقاري للجميع — ابدأ ببناء محفظتك العقارية من 100 يورو فقط.',
+    reg_eyebrow:'رسالتنا الأساسية',
+    reg_h2:'نحن لا ننتظر<br>التنظيم.<br><span style="color:var(--gold)">نحن نبنيه.</span>',
+    reg_desc:'معظم مشاريع العملات المشفرة تهرب من التنظيم. BRIDEX يتجه نحوه.',
+    reg_quote:'"أنت تدخل مجالاً غير منظم بالكامل بعد — لكن القوانين <strong>قادمة بالفعل</strong>، وسيكون BRIDEX متوافقاً عند ذلك اليوم."',
+    how_eyebrow:'دورة الحياة الكاملة',
+    how_h2:'من العقار<br>إلى الرمز في دقائق.',
+    how_desc:'يغطي BRIDEX دورة التوكنة الكاملة — من الهيكل القانوني إلى إعداد المستثمرين وتوزيع الإيجارات التلقائي.',
+    asset_eyebrow:'أنواع الأصول',
+    asset_h2:'أي عقار.<br>أي دولة.',
+    asset_desc:'يُرمّز BRIDEX جميع أنواع العقارات — السكنية والتجارية ومشاريع التطوير — من أي دولة في العالم.',
+    tok_eyebrow:'اقتصاديات الرمز',
+    tok_h2:'مبني للقيمة الحقيقية.',
+    tok_desc:'عرض ثابت. تضخم صفري. كل رمز BRIK مدعوم بنظام BRIDEX العقاري على XRP Ledger.',
+    road_eyebrow:'خارطة الطريق',
+    road_h2:'بناء المستقبل.<br>BRIK واحدة في كل مرة.',
+    road_desc:'من نشأة الرمز إلى نظام بيئي عقاري عالمي ومتوافق.',
+    why_eyebrow:'لماذا XRP Ledger',
+    why_h2:'الأساس الأسرع<br>للأصول الواقعية.',
+    why_desc:'اخترنا XRPL لأن العقارات تتطلب السرعة والتكلفة المنخفضة والموثوقية.',
+    cta_badge:'القائمة البيضاء مفتوحة الآن',
+    cta_h2:'امتلك أول<br><span class="acc">BRIK اليوم.</span>',
+    cta_desc:'كن جزءاً من الجيل الأول الذي يمتلك عقارات على السلسلة.',
+    cta_wl_title:'القائمة البيضاء IDO — مفتوحة الآن',
+    cta_wl_desc:'سجّل محفظة XRPL الخاصة بك وأمّن موقعك قبل إطلاق IDO.',
+    cta_wl_sub:'الأول يُخدَّم أولاً. لا التزام حتى KYC عند إطلاق IDO.',
+    btn_join_wl:'الانضمام للقائمة البيضاء', btn_view_wl:'عرض القائمة العامة',
+    follow_x:'تابع على X', telegram:'تيليغرام', discord:'ديسكورد', whitepaper:'الورقة البيضاء',
+    footer_copy:'© 2026 BRIDEX · رمز BRIK · عقارات على XRP Ledger',
+    terms:'الشروط', privacy:'الخصوصية',
+  },
+  pt:{flag:'🇧🇷',code:'PT',dir:'ltr',login:'Entrar',launch:'Lançar App',whitelist_btn:'Lista Branca',nav_platform:'Plataforma',nav_how:'Como funciona',nav_token:'Token BRIK',nav_roadmap:'Roteiro',nav_regulation:'Regulação',hero_eyebrow:'Construído para as regras que estão chegando',hero_h1:'O futuro do<br>imobiliário é<br><span class="acc">on-chain.</span>',hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',hero_p:'Tokenize, invista e negocie <strong>imóveis fracionados</strong> globalmente — com KYC/AML integrado, estruturas SPV e distribuição automática de rendas.',btn_launch:'Lançar App',btn_whitepaper:'Ler Whitepaper',kpi1_l:'Supply fixo de BRIK',kpi2_l:'Preço IDO',kpi3_l:'Investimento mínimo',kpi4_l:'MiCA pronto',opp1_title:'Tokenização imobiliária até 2035',opp1_desc:'O mercado global de imóveis tokenizados deverá atingir 4 trilhões de dólares até 2035.',opp2_title:'Dos imóveis ainda não tokenizados',opp2_desc:'O mercado imobiliário global supera 326 trilhões de dólares. Apenas 2% está digitalizado.',opp3_title:'Investimento mínimo em qualquer imóvel',opp3_desc:'BRIDEX abre o investimento imobiliário a todos. Comece com apenas 100 EUR.',reg_eyebrow:'Nossa mensagem central',reg_h2:'Não estamos esperando<br>pela regulação.<br><span style="color:var(--gold)">Estamos construindo-a.</span>',reg_desc:'A maioria dos projetos crypto foge da regulação. A BRIDEX vai em direção a ela.',reg_quote:'"Você está entrando em um espaço que ainda não é totalmente regulado — mas as leis <strong>já estão chegando</strong>, e a BRIDEX já estará em conformidade."',how_eyebrow:'Ciclo de vida completo',how_h2:'De imóvel para<br>token em minutos.',how_desc:'A BRIDEX cobre o ciclo completo de tokenização — da estruturação jurídica à distribuição automática de rendas.',asset_eyebrow:'Tipos de ativos',asset_h2:'Qualquer imóvel.<br>Qualquer país.',asset_desc:'A BRIDEX tokeniza todos os tipos de imóveis de qualquer jurisdição do mundo.',tok_eyebrow:'Tokenomics',tok_h2:'Construído para valor real.',tok_desc:'Supply fixo. Zero inflação. Cada token BRIK respaldado pelo ecossistema imobiliário da BRIDEX.',road_eyebrow:'Roteiro',road_h2:'Construindo o futuro.<br>Um BRIK de cada vez.',road_desc:'Do génesis do token a um ecossistema imobiliário global e em conformidade.',why_eyebrow:'Por que XRP Ledger',why_h2:'A base mais rápida<br>para ativos do mundo real.',why_desc:'Escolhemos XRPL porque o imobiliário exige velocidade, baixo custo e fiabilidade.',cta_badge:'Lista Branca aberta agora',cta_h2:'Compre o seu primeiro<br><span class="acc">BRIK hoje.</span>',cta_desc:'Faça parte da primeira geração a possuir imóveis on-chain.',cta_wl_title:'IDO Lista Branca — Aberta agora',cta_wl_desc:'Registe a sua carteira XRPL e garanta a sua posição antes do lançamento do IDO.',cta_wl_sub:'Primeiro a chegar, primeiro a ser atendido.',btn_join_wl:'Aderir à Lista Branca',btn_view_wl:'Ver Lista Pública',follow_x:'Seguir no X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Token BRIK · Imóveis no XRP Ledger',terms:'Termos',privacy:'Privacidade'},
+  ru:{flag:'🇷🇺',code:'RU',dir:'ltr',login:'Войти',launch:'Запустить приложение',whitelist_btn:'Белый список',nav_platform:'Платформа',nav_how:'Как работает',nav_token:'Токен BRIK',nav_roadmap:'Дорожная карта',nav_regulation:'Регулирование',hero_eyebrow:'Создан для правил, которые грядут',hero_h1:'Будущее<br>недвижимости<br><span class="acc">в блокчейне.</span>',hero_mono:'BRIDEX · ТОКЕН BRIK · XRP LEDGER',hero_p:'Токенизируйте, инвестируйте и торгуйте <strong>долями в недвижимости</strong> по всему миру — с интегрированным KYC/AML, юридическими структурами SPV и автоматическим распределением арендного дохода.',btn_launch:'Запустить приложение',btn_whitepaper:'Читать Whitepaper',kpi1_l:'Фиксированное предложение BRIK',kpi2_l:'Цена IDO',kpi3_l:'Минимальная инвестиция',kpi4_l:'Готов к MiCA',opp1_title:'Токенизация недвижимости к 2035 году',opp1_desc:'Ожидается, что глобальный рынок токенизированной недвижимости достигнет 4 триллионов долларов к 2035 году.',opp2_title:'Недвижимости ещё не токенизировано',opp2_desc:'Глобальный рынок недвижимости превышает 326 триллионов долларов. Только 2% оцифровано.',opp3_title:'Минимальная инвестиция в любую недвижимость',opp3_desc:'BRIDEX открывает инвестиции в недвижимость для всех — начните с 100 евро.',reg_eyebrow:'Наше ключевое послание',reg_h2:'Мы не ждём<br>регулирования.<br><span style="color:var(--gold)">Мы его строим.</span>',reg_desc:'Большинство криптопроектов бегут от регулирования. BRIDEX идёт ему навстречу.',reg_quote:'"Вы входите в пространство, которое ещё не полностью регулируется — но законы <strong>уже приходят</strong>, и BRIDEX уже будет в соответствии."',how_eyebrow:'Полный жизненный цикл',how_h2:'От объекта<br>до токена за минуты.',how_desc:'BRIDEX охватывает полный жизненный цикл токенизации — от юридической структуры до автоматического распределения арендного дохода.',asset_eyebrow:'Типы активов',asset_h2:'Любой объект.<br>Любая страна.',asset_desc:'BRIDEX токенизирует все типы недвижимости из любой юрисдикции мира.',tok_eyebrow:'Токеномика',tok_h2:'Создан для реальной ценности.',tok_desc:'Фиксированное предложение. Нулевая инфляция. Каждый токен BRIK подкреплён экосистемой.',road_eyebrow:'Дорожная карта',road_h2:'Строим будущее.<br>Один BRIK за раз.',road_desc:'От генезиса токена до глобальной соответствующей экосистемы.',why_eyebrow:'Почему XRP Ledger',why_h2:'Самая быстрая основа<br>для реальных активов.',why_desc:'Мы выбрали XRPL, потому что недвижимость требует скорости, низких затрат и надёжности.',cta_badge:'Белый список открыт сейчас',cta_h2:'Купите первый<br><span class="acc">BRIK сегодня.</span>',cta_desc:'Станьте частью первого поколения, владеющего недвижимостью в блокчейне.',cta_wl_title:'IDO Белый список — открыт сейчас',cta_wl_desc:'Зарегистрируйте кошелёк XRPL и займите позицию до запуска IDO.',cta_wl_sub:'Первым пришёл — первым обслужен.',btn_join_wl:'Вступить в белый список',btn_view_wl:'Просмотреть публичный список',follow_x:'Подписаться в X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Токен BRIK · Недвижимость на XRP Ledger',terms:'Условия',privacy:'Конфиденциальность'},
+  de:{flag:'🇩🇪',code:'DE',dir:'ltr',login:'Anmelden',launch:'App starten',whitelist_btn:'Whitelist',nav_platform:'Plattform',nav_how:'Wie es funktioniert',nav_token:'BRIK Token',nav_roadmap:'Roadmap',nav_regulation:'Regulierung',hero_eyebrow:'Gebaut für die kommenden Regeln',hero_h1:'Die Zukunft der<br>Immobilien ist<br><span class="acc">on-chain.</span>',hero_mono:'BRIDEX · BRIK TOKEN · XRP LEDGER',hero_p:'Tokenisieren, investieren und handeln Sie <strong>Bruchteile von Immobilien</strong> weltweit — mit integriertem KYC/AML, SPV-Strukturen und automatischer Mietverteilung.',btn_launch:'App starten',btn_whitepaper:'Whitepaper lesen',kpi1_l:'BRIK Gesamtangebot',kpi2_l:'IDO-Startpreis',kpi3_l:'Mindestinvestition',kpi4_l:'MiCA-bereit',opp1_title:'Immobilien-Tokenisierung bis 2035',opp1_desc:'Der globale Markt für tokenisierte Immobilien soll bis 2035 4 Billionen Dollar erreichen.',opp2_title:'Der Immobilien noch nicht tokenisiert',opp2_desc:'Der globale Immobilienmarkt übersteigt 326 Billionen Dollar. Nur 2% ist digitalisiert.',opp3_title:'Mindestinvestition in jede Immobilie',opp3_desc:'BRIDEX öffnet Immobilieninvestitionen für jeden — ab nur 100 EUR.',reg_eyebrow:'Unsere Kernbotschaft',reg_h2:'Wir warten nicht<br>auf Regulierung.<br><span style="color:var(--gold)">Wir bauen sie.</span>',reg_desc:'Die meisten Krypto-Projekte fliehen vor der Regulierung. BRIDEX geht auf sie zu.',reg_quote:'"Sie betreten einen Bereich, der noch nicht vollständig reguliert ist — aber die Gesetze <strong>kommen bereits</strong>, und BRIDEX wird bereits compliant sein."',how_eyebrow:'Ende-zu-Ende-Lebenszyklus',how_h2:'Von der Immobilie<br>zum Token in Minuten.',how_desc:'BRIDEX deckt den vollständigen Tokenisierungslebenszyklus ab.',asset_eyebrow:'Asset-Typen',asset_h2:'Jede Immobilie.<br>Jedes Land.',asset_desc:'BRIDEX tokenisiert alle Arten von Immobilien aus jeder Jurisdiktion.',tok_eyebrow:'Tokenomics',tok_h2:'Für echten Wert gebaut.',tok_desc:'Festes Angebot. Keine Inflation. Jeder BRIK-Token durch das Ökosystem gedeckt.',road_eyebrow:'Roadmap',road_h2:'Die Zukunft bauen.<br>Ein BRIK nach dem anderen.',road_desc:'Von der Token-Genesis bis zum globalen konformen Ökosystem.',why_eyebrow:'Warum XRP Ledger',why_h2:'Das schnellste Fundament<br>für reale Assets.',why_desc:'Wir wählten XRPL, weil Immobilien Geschwindigkeit, niedrige Kosten und Zuverlässigkeit erfordern.',cta_badge:'Whitelist jetzt offen',cta_h2:'Kaufen Sie Ihren ersten<br><span class="acc">BRIK heute.</span>',cta_desc:'Werden Sie Teil der ersten Generation, die Immobilien on-chain besitzt.',cta_wl_title:'IDO Whitelist — Jetzt offen',cta_wl_desc:'Registrieren Sie Ihre XRPL-Wallet und sichern Sie Ihre Position.',cta_wl_sub:'Wer zuerst kommt, mahlt zuerst.',btn_join_wl:'Whitelist beitreten',btn_view_wl:'Öffentliche Liste ansehen',follow_x:'Auf X folgen',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · BRIK Token · Immobilien auf XRP Ledger',terms:'AGB',privacy:'Datenschutz'},
+  fr:{flag:'🇫🇷',code:'FR',dir:'ltr',login:'Connexion',launch:'Lancer l'App',whitelist_btn:'Liste Blanche',nav_platform:'Plateforme',nav_how:'Comment ça marche',nav_token:'Token BRIK',nav_roadmap:'Feuille de route',nav_regulation:'Réglementation',hero_eyebrow:'Conçu pour les règles à venir',hero_h1:'L'avenir de<br>l'immobilier est<br><span class="acc">on-chain.</span>',hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',hero_p:'Tokenisez, investissez et échangez des <strong>fractions immobilières</strong> mondialement — avec KYC/AML intégré, structures SPV et distribution automatique des loyers.',btn_launch:'Lancer l'App',btn_whitepaper:'Lire le Whitepaper',kpi1_l:'Offre fixe de BRIK',kpi2_l:'Prix IDO',kpi3_l:'Investissement minimum',kpi4_l:'Prêt pour MiCA',opp1_title:'Tokenisation immobilière d'ici 2035',opp1_desc:'Le marché mondial de l'immobilier tokenisé devrait atteindre 4 000 milliards de dollars d'ici 2035.',opp2_title:'De l'immobilier pas encore tokenisé',opp2_desc:'Le marché immobilier mondial dépasse 326 000 milliards de dollars. Seulement 2% est numérisé.',opp3_title:'Investissement minimum dans n'importe quel bien',opp3_desc:'BRIDEX ouvre l'investissement immobilier à tous — à partir de seulement 100 EUR.',reg_eyebrow:'Notre message central',reg_h2:'Nous n'attendons pas<br>la réglementation.<br><span style="color:var(--gold)">Nous la construisons.</span>',reg_desc:'La plupart des projets crypto fuient la réglementation. BRIDEX va à sa rencontre.',reg_quote:'"Vous entrez dans un espace pas encore entièrement réglementé — mais les lois <strong>arrivent déjà</strong>, et BRIDEX sera déjà conforme ce jour-là."',how_eyebrow:'Cycle de vie complet',how_h2:'De la propriété<br>au token en minutes.',how_desc:'BRIDEX couvre l'ensemble du cycle de tokenisation.',asset_eyebrow:'Types d'actifs',asset_h2:'N'importe quel bien.<br>N'importe quel pays.',asset_desc:'BRIDEX tokenise tous types de biens immobiliers dans n'importe quelle juridiction.',tok_eyebrow:'Tokenomics',tok_h2:'Conçu pour la vraie valeur.',tok_desc:'Offre fixe. Zéro inflation. Chaque token BRIK soutenu par l'écosystème.',road_eyebrow:'Feuille de route',road_h2:'Construire l'avenir.<br>Un BRIK à la fois.',road_desc:'Du genesis du token à un écosystème mondial conforme.',why_eyebrow:'Pourquoi XRP Ledger',why_h2:'La base la plus rapide<br>pour les actifs réels.',why_desc:'Nous avons choisi XRPL car l'immobilier exige vitesse, faible coût et fiabilité.',cta_badge:'Liste Blanche ouverte maintenant',cta_h2:'Achetez votre premier<br><span class="acc">BRIK aujourd'hui.</span>',cta_desc:'Faites partie de la première génération à posséder de l'immobilier on-chain.',cta_wl_title:'IDO Liste Blanche — Ouverte maintenant',cta_wl_desc:'Enregistrez votre portefeuille XRPL et sécurisez votre position.',cta_wl_sub:'Premier arrivé, premier servi.',btn_join_wl:'Rejoindre la Liste Blanche',btn_view_wl:'Voir la Liste Publique',follow_x:'Suivre sur X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Token BRIK · Immobilier sur XRP Ledger',terms:'CGU',privacy:'Confidentialité'},
+  it:{flag:'🇮🇹',code:'IT',dir:'ltr',login:'Accedi',launch:'Avvia App',whitelist_btn:'Lista Bianca',nav_platform:'Piattaforma',nav_how:'Come funziona',nav_token:'Token BRIK',nav_roadmap:'Roadmap',nav_regulation:'Regolamentazione',hero_eyebrow:'Costruito per le regole che stanno arrivando',hero_h1:'Il futuro del<br>settore immobiliare è<br><span class="acc">on-chain.</span>',hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',hero_p:'Tokenizza, investi e scambia <strong>quote immobiliari</strong> globalmente — con KYC/AML integrato, strutture SPV e distribuzione automatica degli affitti.',btn_launch:'Avvia App',btn_whitepaper:'Leggi Whitepaper',kpi1_l:'Supply fisso di BRIK',kpi2_l:'Prezzo IDO',kpi3_l:'Investimento minimo',kpi4_l:'Pronto per MiCA',opp1_title:'Tokenizzazione immobiliare entro il 2035',opp1_desc:'Il mercato globale degli immobili tokenizzati dovrebbe raggiungere 4 trilioni di dollari entro il 2035.',opp2_title:'Degli immobili non ancora tokenizzati',opp2_desc:'Il mercato immobiliare globale supera i 326 trilioni di dollari. Solo il 2% è digitalizzato.',opp3_title:'Investimento minimo in qualsiasi proprietà',opp3_desc:'BRIDEX apre gli investimenti immobiliari a tutti — a partire da soli 100 EUR.',reg_eyebrow:'Il nostro messaggio centrale',reg_h2:'Non stiamo aspettando<br>la regolamentazione.<br><span style="color:var(--gold)">La stiamo costruendo.</span>',reg_desc:'La maggior parte dei progetti crypto fugge dalla regolamentazione. BRIDEX la affronta.',reg_quote:'"Stai entrando in uno spazio non ancora completamente regolamentato — ma le leggi <strong>stanno già arrivando</strong>, e BRIDEX sarà già conforme."',how_eyebrow:'Ciclo di vita end-to-end',how_h2:'Dalla proprietà<br>al token in minuti.',how_desc:'BRIDEX copre l'intero ciclo di tokenizzazione.',asset_eyebrow:'Tipi di asset',asset_h2:'Qualsiasi proprietà.<br>Qualsiasi paese.',asset_desc:'BRIDEX tokenizza tutti i tipi di immobili in qualsiasi giurisdizione del mondo.',tok_eyebrow:'Tokenomics',tok_h2:'Costruito per il valore reale.',tok_desc:'Supply fisso. Zero inflazione. Ogni token BRIK sostenuto dall'ecosistema.',road_eyebrow:'Roadmap',road_h2:'Costruire il futuro.<br>Un BRIK alla volta.',road_desc:'Dal genesis del token a un ecosistema globale conforme.',why_eyebrow:'Perché XRP Ledger',why_h2:'La base più veloce<br>per gli asset del mondo reale.',why_desc:'Abbiamo scelto XRPL perché il settore immobiliare richiede velocità, bassi costi e affidabilità.',cta_badge:'Lista Bianca aperta ora',cta_h2:'Acquista il tuo primo<br><span class="acc">BRIK oggi.</span>',cta_desc:'Fai parte della prima generazione a possedere immobili on-chain.',cta_wl_title:'IDO Lista Bianca — Aperta ora',cta_wl_desc:'Registra il tuo wallet XRPL e assicurati la tua posizione.',cta_wl_sub:'Chi prima arriva, meglio alloggia.',btn_join_wl:'Iscriviti alla Lista Bianca',btn_view_wl:'Visualizza Lista Pubblica',follow_x:'Segui su X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Token BRIK · Immobili su XRP Ledger',terms:'Termini',privacy:'Privacy'},
+  tr:{flag:'🇹🇷',code:'TR',dir:'ltr',login:'Giriş Yap',launch:'Uygulamayı Başlat',whitelist_btn:'Beyaz Liste',nav_platform:'Platform',nav_how:'Nasıl çalışır',nav_token:'BRIK Token',nav_roadmap:'Yol Haritası',nav_regulation:'Düzenleme',hero_eyebrow:'Gelen kurallar için inşa edildi',hero_h1:'Gayrimenkulün<br>geleceği<br><span class="acc">zincir üzerinde.</span>',hero_mono:'BRIDEX · BRIK TOKEN · XRP LEDGER',hero_p:'Küresel olarak <strong>kesirli gayrimenkul</strong> tokenize edin, yatırım yapın ve ticaret yapın — entegre KYC/AML, SPV hukuki yapıları ve otomatik kira dağıtımı ile.',btn_launch:'Uygulamayı Başlat',btn_whitepaper:'Whitepaper Oku',kpi1_l:'Sabit BRIK arzı',kpi2_l:'IDO fiyatı',kpi3_l:'Minimum yatırım',kpi4_l:'MiCA hazır',opp1_title:'2035 yılına kadar gayrimenkul tokenizasyonu',opp1_desc:'Küresel tokenize gayrimenkul pazarının 2035 yılına kadar 4 trilyon dolara ulaşması bekleniyor.',opp2_title:'Gayrimenkulün henüz tokenize edilmemiş',opp2_desc:'Küresel gayrimenkul piyasası 326 trilyon doları aşıyor. Sadece %2'si dijitalleştirildi.',opp3_title:'Herhangi bir mülkte minimum yatırım',opp3_desc:'BRIDEX gayrimenkul yatırımını herkese açıyor — sadece 100 EUR'dan başlayan portföy.',reg_eyebrow:'Temel mesajımız',reg_h2:'Düzenlemeyi<br>beklemiyoruz.<br><span style="color:var(--gold)">Onu inşa ediyoruz.</span>',reg_desc:'Kripto projelerinin çoğu düzenlemeden kaçıyor. BRIDEX ona doğru koşuyor.',reg_quote:'"Henüz tamamen düzenlenmemiş bir alana giriyorsunuz — ama yasalar <strong>zaten geliyor</strong> ve BRIDEX o gün geldiğinde zaten uyumlu olacak."',how_eyebrow:'Uçtan uca yaşam döngüsü',how_h2:'Mülkten<br>token'a dakikalar içinde.',how_desc:'BRIDEX tokenizasyon yaşam döngüsünün tamamını kapsar.',asset_eyebrow:'Varlık türleri',asset_h2:'Her mülk.<br>Her ülke.',asset_desc:'BRIDEX, dünyanın herhangi bir yargı bölgesinden her türlü gayrimenkulü tokenize eder.',tok_eyebrow:'Tokenomics',tok_h2:'Gerçek değer için inşa edildi.',tok_desc:'Sabit arz. Sıfır enflasyon. Her BRIK tokeni ekosistem tarafından destekleniyor.',road_eyebrow:'Yol Haritası',road_h2:'Geleceği inşa etmek.<br>Bir seferde bir BRIK.',road_desc:'Token genesis'inden küresel uyumlu ekosisteme.',why_eyebrow:'Neden XRP Ledger',why_h2:'Gerçek varlıklar için<br>en hızlı temel.',why_desc:'Gayrimenkul hız, düşük maliyet ve güvenilirlik gerektirdiği için XRPL'i seçtik.',cta_badge:'Beyaz Liste şimdi açık',cta_h2:'İlk<br><span class="acc">BRIK'inizi bugün alın.</span>',cta_desc:'Zincir üzerinde gayrimenkul sahibi olan ilk neslin parçası olun.',cta_wl_title:'IDO Beyaz Listesi — Şimdi açık',cta_wl_desc:'XRPL cüzdanınızı kaydedin ve IDO lansmanından önce pozisyonunuzu güvence altına alın.',cta_wl_sub:'İlk gelen, ilk alır.',btn_join_wl:'Beyaz Listeye Katıl',btn_view_wl:'Herkese Açık Listeyi Görüntüle',follow_x:'X'te Takip Et',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · BRIK Token · XRP Ledger'da Gayrimenkul',terms:'Şartlar',privacy:'Gizlilik'},
+  pl:{flag:'🇵🇱',code:'PL',dir:'ltr',login:'Zaloguj się',launch:'Uruchom App',whitelist_btn:'Biała Lista',nav_platform:'Platforma',nav_how:'Jak to działa',nav_token:'Token BRIK',nav_roadmap:'Harmonogram',nav_regulation:'Regulacje',hero_eyebrow:'Zbudowany pod nadchodzące przepisy',hero_h1:'Przyszłość<br>nieruchomości jest<br><span class="acc">on-chain.</span>',hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',hero_p:'Tokenizuj, inwestuj i handluj <strong>ułamkami nieruchomości</strong> globalnie — ze zintegrowanym KYC/AML, strukturami SPV i automatyczną dystrybucją czynszów.',btn_launch:'Uruchom App',btn_whitepaper:'Czytaj Whitepaper',kpi1_l:'Stała podaż BRIK',kpi2_l:'Cena IDO',kpi3_l:'Minimalna inwestycja',kpi4_l:'Gotowy na MiCA',opp1_title:'Tokenizacja nieruchomości do 2035',opp1_desc:'Globalny rynek tokenizowanych nieruchomości ma osiągnąć 4 biliony dolarów do 2035 roku.',opp2_title:'Nieruchomości jeszcze niezatokenizowanych',opp2_desc:'Globalny rynek nieruchomości przekracza 326 bilionów dolarów. Tylko 2% jest zdigitalizowane.',opp3_title:'Minimalna inwestycja w dowolną nieruchomość',opp3_desc:'BRIDEX otwiera inwestycje w nieruchomości dla wszystkich — zacznij od 100 EUR.',reg_eyebrow:'Nasz kluczowy przekaz',reg_h2:'Nie czekamy<br>na regulacje.<br><span style="color:var(--gold)">Budujemy je.</span>',reg_desc:'Większość projektów krypto ucieka przed regulacjami. BRIDEX idzie im naprzeciw.',reg_quote:'"Wchodzisz w przestrzeń, która nie jest jeszcze w pełni uregulowana — ale przepisy <strong>już nadchodzą</strong>, a BRIDEX będzie już zgodny."',how_eyebrow:'Kompleksowy cykl życia',how_h2:'Od nieruchomości<br>do tokena w minutach.',how_desc:'BRIDEX obejmuje pełny cykl tokenizacji.',asset_eyebrow:'Typy aktywów',asset_h2:'Każda nieruchomość.<br>Każdy kraj.',asset_desc:'BRIDEX tokenizuje wszystkie typy nieruchomości z dowolnej jurysdykcji na świecie.',tok_eyebrow:'Tokenomics',tok_h2:'Zbudowany dla realnej wartości.',tok_desc:'Stała podaż. Zero inflacji. Każdy token BRIK wspierany przez ekosystem.',road_eyebrow:'Harmonogram',road_h2:'Budujemy przyszłość.<br>Jeden BRIK na raz.',road_desc:'Od genezy tokena do globalnego zgodnego ekosystemu.',why_eyebrow:'Dlaczego XRP Ledger',why_h2:'Najszybszy fundament<br>dla aktywów realnego świata.',why_desc:'Wybraliśmy XRPL, bo nieruchomości wymagają szybkości, niskich kosztów i niezawodności.',cta_badge:'Biała Lista otwarta teraz',cta_h2:'Kup swój pierwszy<br><span class="acc">BRIK dziś.</span>',cta_desc:'Bądź częścią pierwszego pokolenia posiadającego nieruchomości on-chain.',cta_wl_title:'IDO Biała Lista — Otwarta teraz',cta_wl_desc:'Zarejestruj swój portfel XRPL i zabezpiecz swoją pozycję.',cta_wl_sub:'Kto pierwszy, ten lepszy.',btn_join_wl:'Dołącz do Białej Listy',btn_view_wl:'Zobacz Publiczną Listę',follow_x:'Obserwuj na X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Token BRIK · Nieruchomości na XRP Ledger',terms:'Regulamin',privacy:'Prywatność'},
+  ja:{flag:'🇯🇵',code:'日本語',dir:'ltr',login:'ログイン',launch:'アプリを起動',whitelist_btn:'ホワイトリスト',nav_platform:'プラットフォーム',nav_how:'仕組み',nav_token:'BRIKトークン',nav_roadmap:'ロードマップ',nav_regulation:'規制',hero_eyebrow:'来るべきルールのために構築',hero_h1:'不動産の未来は<br><span class="acc">オンチェーン。</span>',hero_mono:'BRIDEX · BRIK トークン · XRP レジャー',hero_p:'KYC/AML統合、SPV法的構造、自動家賃分配を備えた<strong>不動産分数所有権</strong>をグローバルにトークン化、投資、取引。',btn_launch:'アプリを起動',btn_whitepaper:'ホワイトペーパーを読む',kpi1_l:'BRIK固定供給量',kpi2_l:'IDO価格',kpi3_l:'最低投資額',kpi4_l:'MiCA対応',opp1_title:'2035年までの不動産トークン化',opp1_desc:'グローバルなトークン化不動産市場は2035年までに4兆ドルに達すると予測されています。',opp2_title:'の不動産がまだトークン化されていない',opp2_desc:'グローバル不動産市場は326兆ドルを超えています。デジタル化されているのはわずか2%です。',opp3_title:'あらゆる物件への最低投資額',opp3_desc:'BRIDEXはすべての人に不動産投資を開放します — わずか100ユーロから始められます。',reg_eyebrow:'私たちの核心メッセージ',reg_h2:'規制を<br>待っていません。<br><span style="color:var(--gold)">構築しています。</span>',reg_desc:'ほとんどの暗号プロジェクトは規制から逃げています。BRIDEXは規制に向かって進んでいます。',reg_quote:'"あなたはまだ完全に規制されていない空間に入ろうとしています — しかし法律は<strong>すでに来ています</strong>、そしてBRIDEXはその日に既に準拠しているでしょう。"',how_eyebrow:'エンドツーエンドのライフサイクル',how_h2:'物件から<br>トークンへ数分で。',how_desc:'BRIDEXはトークン化ライフサイクル全体をカバーします。',asset_eyebrow:'資産タイプ',asset_h2:'あらゆる物件。<br>あらゆる国。',asset_desc:'BRIDEXは世界中のあらゆる管轄区域のあらゆる種類の不動産をトークン化します。',tok_eyebrow:'トークノミクス',tok_h2:'真の価値のために構築。',tok_desc:'固定供給。ゼロインフレ。すべてのBRIKトークンはエコシステムに裏付けられています。',road_eyebrow:'ロードマップ',road_h2:'未来を構築。<br>一度に一つのBRIK。',road_desc:'トークンの誕生からグローバルなコンプライアントエコシステムへ。',why_eyebrow:'XRP Ledgerを選ぶ理由',why_h2:'実世界資産のための<br>最速の基盤。',why_desc:'不動産は速度、低コスト、信頼性を必要とするためXRPLを選択しました。',cta_badge:'ホワイトリスト受付中',cta_h2:'最初の<br><span class="acc">BRIKを今日購入。</span>',cta_desc:'オンチェーンで不動産を所有する最初の世代の一員になりましょう。',cta_wl_title:'IDO ホワイトリスト — 受付中',cta_wl_desc:'XRPLウォレットを登録してIDO前にポジションを確保してください。',cta_wl_sub:'先着順。IDO時のKYCまでコミットメント不要。',btn_join_wl:'ホワイトリストに参加',btn_view_wl:'公開リストを表示',follow_x:'Xでフォロー',telegram:'Telegram',discord:'Discord',whitepaper:'ホワイトペーパー',footer_copy:'© 2026 BRIDEX · BRIKトークン · XRP Ledger上の不動産',terms:'利用規約',privacy:'プライバシー'},
+  ko:{flag:'🇰🇷',code:'한국어',dir:'ltr',login:'로그인',launch:'앱 실행',whitelist_btn:'화이트리스트',nav_platform:'플랫폼',nav_how:'작동 방식',nav_token:'BRIK 토큰',nav_roadmap:'로드맵',nav_regulation:'규제',hero_eyebrow:'다가오는 규정을 위해 구축됨',hero_h1:'부동산의 미래는<br><span class="acc">온체인.</span>',hero_mono:'BRIDEX · BRIK 토큰 · XRP 레저',hero_p:'KYC/AML 통합, SPV 법적 구조 및 자동 임대 수익 분배를 통해 전 세계적으로 <strong>부동산 분할 소유권</strong>을 토큰화, 투자, 거래하세요.',btn_launch:'앱 실행',btn_whitepaper:'백서 읽기',kpi1_l:'BRIK 고정 공급량',kpi2_l:'IDO 가격',kpi3_l:'최소 투자금',kpi4_l:'MiCA 준비 완료',opp1_title:'2035년까지 부동산 토큰화',opp1_desc:'글로벌 토큰화 부동산 시장은 2035년까지 4조 달러에 이를 것으로 예상됩니다.',opp2_title:'의 부동산이 아직 토큰화되지 않음',opp2_desc:'글로벌 부동산 시장은 326조 달러를 초과합니다. 디지털화된 것은 2%에 불과합니다.',opp3_title:'모든 부동산의 최소 투자금',opp3_desc:'BRIDEX는 모든 사람에게 부동산 투자를 개방합니다 — 단 100유로부터 시작하세요.',reg_eyebrow:'우리의 핵심 메시지',reg_h2:'규제를<br>기다리지 않습니다.<br><span style="color:var(--gold)">우리가 만들고 있습니다.</span>',reg_desc:'대부분의 암호화폐 프로젝트는 규제를 피합니다. BRIDEX는 규제를 향해 달려갑니다.',reg_quote:'"아직 완전히 규제되지 않은 공간에 들어가고 있습니다 — 하지만 법률은 <strong>이미 오고 있으며</strong>, BRIDEX는 그날이 오면 이미 준수 상태일 것입니다."',how_eyebrow:'엔드투엔드 라이프사이클',how_h2:'부동산에서<br>토큰까지 몇 분 안에.',how_desc:'BRIDEX는 법적 구조화부터 자동 임대 분배까지 전체 토큰화 라이프사이클을 커버합니다.',asset_eyebrow:'자산 유형',asset_h2:'모든 부동산.<br>모든 국가.',asset_desc:'BRIDEX는 전 세계 모든 관할권의 모든 유형의 부동산을 토큰화합니다.',tok_eyebrow:'토크노믹스',tok_h2:'실제 가치를 위해 구축.',tok_desc:'고정 공급. 제로 인플레이션. 모든 BRIK 토큰은 생태계에 의해 지원됩니다.',road_eyebrow:'로드맵',road_h2:'미래를 구축합니다.<br>한 번에 하나의 BRIK.',road_desc:'토큰 제네시스부터 글로벌 규정 준수 생태계까지.',why_eyebrow:'왜 XRP Ledger인가',why_h2:'실물 자산을 위한<br>가장 빠른 기반.',why_desc:'부동산은 속도, 낮은 비용, 신뢰성을 요구하기 때문에 XRPL을 선택했습니다.',cta_badge:'화이트리스트 지금 오픈',cta_h2:'오늘 첫 번째<br><span class="acc">BRIK을 구매하세요.</span>',cta_desc:'온체인에서 부동산을 소유하는 첫 번째 세대의 일원이 되세요.',cta_wl_title:'IDO 화이트리스트 — 지금 오픈',cta_wl_desc:'XRPL 지갑을 등록하고 IDO 출시 전에 포지션을 확보하세요.',cta_wl_sub:'선착순. IDO 출시 시 KYC 전까지 약정 불필요.',btn_join_wl:'화이트리스트 참여',btn_view_wl:'공개 목록 보기',follow_x:'X에서 팔로우',telegram:'Telegram',discord:'Discord',whitepaper:'백서',footer_copy:'© 2026 BRIDEX · BRIK 토큰 · XRP Ledger의 부동산',terms:'이용약관',privacy:'개인정보'},
+  vi:{flag:'🇻🇳',code:'VI',dir:'ltr',login:'Đăng nhập',launch:'Khởi chạy App',whitelist_btn:'Danh Sách Trắng',nav_platform:'Nền tảng',nav_how:'Cách hoạt động',nav_token:'Token BRIK',nav_roadmap:'Lộ trình',nav_regulation:'Quy định',hero_eyebrow:'Xây dựng cho các quy tắc sắp đến',hero_h1:'Tương lai của<br>bất động sản là<br><span class="acc">trên chuỗi.</span>',hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',hero_p:'Mã hóa, đầu tư và giao dịch <strong>quyền sở hữu bất động sản phân đoạn</strong> toàn cầu — với KYC/AML tích hợp, cấu trúc pháp lý SPV và phân phối tiền thuê tự động.',btn_launch:'Khởi chạy App',btn_whitepaper:'Đọc Whitepaper',kpi1_l:'Tổng cung BRIK cố định',kpi2_l:'Giá IDO',kpi3_l:'Đầu tư tối thiểu',kpi4_l:'Sẵn sàng MiCA',opp1_title:'Mã hóa bất động sản vào năm 2035',opp1_desc:'Thị trường bất động sản mã hóa toàn cầu dự kiến đạt 4 nghìn tỷ đô la vào năm 2035.',opp2_title:'Bất động sản chưa được mã hóa',opp2_desc:'Thị trường bất động sản toàn cầu vượt 326 nghìn tỷ đô la. Chỉ 2% được số hóa.',opp3_title:'Đầu tư tối thiểu vào bất kỳ bất động sản nào',opp3_desc:'BRIDEX mở cửa đầu tư bất động sản cho tất cả mọi người — bắt đầu từ chỉ 100 EUR.',reg_eyebrow:'Thông điệp cốt lõi của chúng tôi',reg_h2:'Chúng tôi không đợi<br>quy định.<br><span style="color:var(--gold)">Chúng tôi đang xây dựng nó.</span>',reg_desc:'Hầu hết các dự án crypto chạy trốn khỏi quy định. BRIDEX tiến về phía nó.',reg_quote:'"Bạn đang bước vào một không gian chưa được quản lý đầy đủ — nhưng các luật <strong>đã đến</strong> và BRIDEX sẽ đã tuân thủ vào ngày đó."',how_eyebrow:'Vòng đời đầu cuối',how_h2:'Từ bất động sản<br>đến token trong vài phút.',how_desc:'BRIDEX bao gồm toàn bộ vòng đời mã hóa.',asset_eyebrow:'Loại tài sản',asset_h2:'Bất kỳ bất động sản.<br>Bất kỳ quốc gia.',asset_desc:'BRIDEX mã hóa tất cả các loại bất động sản từ bất kỳ quốc gia nào trên thế giới.',tok_eyebrow:'Tokenomics',tok_h2:'Xây dựng cho giá trị thực.',tok_desc:'Nguồn cung cố định. Lạm phát bằng không. Mỗi token BRIK được hỗ trợ bởi hệ sinh thái.',road_eyebrow:'Lộ trình',road_h2:'Xây dựng tương lai.<br>Từng BRIK một.',road_desc:'Từ nguồn gốc token đến hệ sinh thái bất động sản toàn cầu tuân thủ.',why_eyebrow:'Tại sao XRP Ledger',why_h2:'Nền tảng nhanh nhất<br>cho tài sản thực.',why_desc:'Chúng tôi chọn XRPL vì bất động sản đòi hỏi tốc độ, chi phí thấp và độ tin cậy.',cta_badge:'Danh Sách Trắng mở ngay',cta_h2:'Sở hữu<br><span class="acc">BRIK đầu tiên hôm nay.</span>',cta_desc:'Trở thành thế hệ đầu tiên sở hữu bất động sản trên chuỗi.',cta_wl_title:'IDO Danh Sách Trắng — Mở ngay',cta_wl_desc:'Đăng ký ví XRPL và bảo đảm vị trí trước khi IDO ra mắt.',cta_wl_sub:'Ai đến trước được phục vụ trước.',btn_join_wl:'Tham gia Danh Sách Trắng',btn_view_wl:'Xem Danh Sách Công Khai',follow_x:'Theo dõi trên X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Token BRIK · Bất động sản trên XRP Ledger',terms:'Điều khoản',privacy:'Quyền riêng tư'},
+  id:{flag:'🇮🇩',code:'ID',dir:'ltr',login:'Masuk',launch:'Luncurkan App',whitelist_btn:'Daftar Putih',nav_platform:'Platform',nav_how:'Cara kerja',nav_token:'Token BRIK',nav_roadmap:'Peta Jalan',nav_regulation:'Regulasi',hero_eyebrow:'Dibangun untuk aturan yang akan datang',hero_h1:'Masa depan<br>properti ada di<br><span class="acc">rantai.</span>',hero_mono:'BRIDEX · TOKEN BRIK · XRP LEDGER',hero_p:'Tokenisasi, investasi, dan perdagangkan <strong>kepemilikan properti fraksional</strong> secara global — dengan KYC/AML terintegrasi, struktur hukum SPV, dan distribusi sewa otomatis.',btn_launch:'Luncurkan App',btn_whitepaper:'Baca Whitepaper',kpi1_l:'Total pasokan BRIK tetap',kpi2_l:'Harga IDO',kpi3_l:'Investasi minimum',kpi4_l:'Siap MiCA',opp1_title:'Tokenisasi real estate pada 2035',opp1_desc:'Pasar real estate yang ditokenisasi secara global diproyeksikan mencapai $4 triliun pada 2035.',opp2_title:'Real estate belum ditokenisasi',opp2_desc:'Pasar real estate global melebihi $326 triliun. Hanya 2% yang terdigitalisasi.',opp3_title:'Investasi minimum di properti apapun',opp3_desc:'BRIDEX membuka investasi real estate untuk semua orang — mulai dari 100 EUR.',reg_eyebrow:'Pesan inti kami',reg_h2:'Kami tidak menunggu<br>regulasi.<br><span style="color:var(--gold)">Kami membangunnya.</span>',reg_desc:'Sebagian besar proyek crypto lari dari regulasi. BRIDEX berlari menuju regulasi.',reg_quote:'"Anda memasuki ruang yang belum sepenuhnya diatur — tetapi undang-undang <strong>sudah datang</strong>, dan BRIDEX akan sudah patuh pada hari itu."',how_eyebrow:'Siklus hidup end-to-end',how_h2:'Dari properti<br>ke token dalam menit.',how_desc:'BRIDEX mencakup siklus tokenisasi lengkap.',asset_eyebrow:'Jenis aset',asset_h2:'Properti apapun.<br>Negara manapun.',asset_desc:'BRIDEX mentokenisasi semua jenis real estate dari yurisdiksi manapun di dunia.',tok_eyebrow:'Tokenomics',tok_h2:'Dibangun untuk nilai nyata.',tok_desc:'Pasokan tetap. Inflasi nol. Setiap token BRIK didukung oleh ekosistem.',road_eyebrow:'Peta Jalan',road_h2:'Membangun masa depan.<br>Satu BRIK sekaligus.',road_desc:'Dari genesis token ke ekosistem real estate global yang patuh.',why_eyebrow:'Mengapa XRP Ledger',why_h2:'Fondasi tercepat<br>untuk aset dunia nyata.',why_desc:'Kami memilih XRPL karena real estate membutuhkan kecepatan, biaya rendah, dan keandalan.',cta_badge:'Daftar Putih kini terbuka',cta_h2:'Miliki<br><span class="acc">BRIK pertama Anda hari ini.</span>',cta_desc:'Jadilah bagian dari generasi pertama yang memiliki real estate on-chain.',cta_wl_title:'IDO Daftar Putih — Terbuka sekarang',cta_wl_desc:'Daftarkan dompet XRPL Anda dan amankan posisi Anda sebelum peluncuran IDO.',cta_wl_sub:'Siapa cepat dia yang dapat.',btn_join_wl:'Bergabung ke Daftar Putih',btn_view_wl:'Lihat Daftar Publik',follow_x:'Ikuti di X',telegram:'Telegram',discord:'Discord',whitepaper:'Whitepaper',footer_copy:'© 2026 BRIDEX · Token BRIK · Real Estate di XRP Ledger',terms:'Syarat',privacy:'Privasi'},
+};
+
+let curL = localStorage.getItem('bridex_lang') || 'en';
+
+function toggleLangMenu(e){if(e)e.stopPropagation();
+  const btn=document.getElementById('lang-btn');
+  const dd=document.getElementById('lang-dd');
+  btn.classList.toggle('open');
+  dd.classList.toggle('open');
+}
+
+function setL(code,e){if(e)e.stopPropagation();
+  curL=code;
+  localStorage.setItem('bridex_lang',code);
+  const L=LL[code];
+  document.getElementById('lf').textContent=L.flag;
+  document.getElementById('lc').textContent=L.code;
+  document.documentElement.dir=L.dir;
+  document.documentElement.lang=code;
+  document.querySelectorAll('.lang-opt').forEach(el=>{
+    el.classList.toggle('active',el.getAttribute('onclick')===`setL('${code}')`);
+  });
+  document.getElementById('lang-btn').classList.remove('open');
+  document.getElementById('lang-dd').classList.remove('open');
+  applyL(L);
+}
+
+function applyL(L){
+  const qi=(sel,html)=>{const e=document.querySelector(sel);if(e)e.innerHTML=html;};
+  const qt=(sel,txt)=>{const e=document.querySelector(sel);if(e)e.textContent=txt;};
+  const da=(sel,attr,val)=>{const e=document.querySelector(sel);if(e)e.setAttribute(attr,val);};
+  const all=(sel,fn)=>document.querySelectorAll(sel).forEach(fn);
+
+  // Nav buttons
+  all('[data-i18n="login"]',e=>e.textContent=L.login);
+  all('[data-i18n="launch"]',e=>e.textContent=L.launch);
+  all('[data-i18n="whitelist_btn"]',e=>e.textContent=L.whitelist_btn);
+
+  // Nav menu links
+  const nlinks=document.querySelectorAll('.nav-menu a');
+  if(nlinks[0])nlinks[0].textContent=L.nav_platform;
+  if(nlinks[1])nlinks[1].textContent=L.nav_how;
+  if(nlinks[2])nlinks[2].textContent=L.nav_token;
+  if(nlinks[3])nlinks[3].textContent=L.nav_roadmap;
+  if(nlinks[4])nlinks[4].textContent=L.nav_regulation;
+
+  // Hero
+  qi('.eyebrow-pill',`<span class="live-dot"></span> ${L.hero_eyebrow}`);
+  qi('.hero-h1',L.hero_h1);
+  qt('.hero-mono',L.hero_mono);
+  qi('.hero-p',L.hero_p);
+  const hbtns=document.querySelectorAll('.hero-btns .btn-hero');
+  if(hbtns[0])hbtns[0].textContent=L.btn_launch;
+  if(hbtns[1])hbtns[1].textContent=L.btn_whitepaper;
+
+  // KPI labels
+  const kpiL=document.querySelectorAll('.kpi-l');
+  if(kpiL[0])kpiL[0].textContent=L.kpi1_l;
+  if(kpiL[1])kpiL[1].textContent=L.kpi2_l;
+  if(kpiL[2])kpiL[2].textContent=L.kpi3_l;
+  if(kpiL[3])kpiL[3].textContent=L.kpi4_l;
+
+  // Opportunity cards
+  const oppT=document.querySelectorAll('.opp-title');
+  const oppD=document.querySelectorAll('.opp-desc');
+  if(oppT[0])oppT[0].textContent=L.opp1_title;
+  if(oppT[1])oppT[1].textContent=L.opp2_title;
+  if(oppT[2])oppT[2].textContent=L.opp3_title;
+  if(oppD[0])oppD[0].textContent=L.opp1_desc;
+  if(oppD[1])oppD[1].textContent=L.opp2_desc;
+  if(oppD[2])oppD[2].textContent=L.opp3_desc;
+
+  // Regulation section
+  const sEyebrows=document.querySelectorAll('.s-eyebrow');
+  const sTitles=document.querySelectorAll('.s-h2');
+  const sDescs=document.querySelectorAll('.s-p');
+  if(sEyebrows[0])sEyebrows[0].textContent=L.reg_eyebrow;
+  if(sTitles[0])sTitles[0].innerHTML=L.reg_h2;
+  if(sDescs[0])sDescs[0].textContent=L.reg_desc;
+  qt('.reg-left-card .reg-quote-text',L.reg_quote);
+  qi('.reg-left-card .reg-quote-text',L.reg_quote);
+
+  // How it works eyebrow/title/desc
+  if(sEyebrows[1])sEyebrows[1].textContent=L.how_eyebrow;
+  if(sTitles[1])sTitles[1].innerHTML=L.how_h2;
+  if(sDescs[1])sDescs[1].textContent=L.how_desc;
+
+  // Asset types
+  if(sEyebrows[2])sEyebrows[2].textContent=L.asset_eyebrow;
+  if(sTitles[2])sTitles[2].innerHTML=L.asset_h2;
+  if(sDescs[2])sDescs[2].textContent=L.asset_desc;
+
+  // Tokenomics
+  if(sEyebrows[3])sEyebrows[3].textContent=L.tok_eyebrow;
+  if(sTitles[3])sTitles[3].innerHTML=L.tok_h2;
+  if(sDescs[3])sDescs[3].textContent=L.tok_desc;
+
+  // Roadmap
+  if(sEyebrows[4])sEyebrows[4].textContent=L.road_eyebrow;
+  if(sTitles[4])sTitles[4].innerHTML=L.road_h2;
+  if(sDescs[4])sDescs[4].textContent=L.road_desc;
+
+  // Why XRPL
+  if(sEyebrows[5])sEyebrows[5].textContent=L.why_eyebrow;
+  if(sTitles[5])sTitles[5].innerHTML=L.why_h2;
+  if(sDescs[5])sDescs[5].textContent=L.why_desc;
+
+  // CTA section
+  qi('.cta > div:first-child',`<span class="live-dot"></span> ${L.cta_badge}`);
+  qi('.cta-h2',L.cta_h2);
+  qt('.cta-p',L.cta_desc);
+
+  // WL highlight box
+  const wlTitle=document.querySelector('.cta [style*="gold_dim"] div:first-child + div');
+  all('.cta [style*="font-size:14px"][style*="font-weight:600"]',e=>e.textContent=L.cta_wl_title);
+  all('.cta [style*="font-size:12px"][style*="color:var(--text2)"]',e=>{
+    if(e.textContent.length>10)e.textContent=L.cta_wl_desc;
+  });
+  all('.cta [style*="font-size:12px"][style*="color:var(--text3)"]',e=>{
+    if(e.textContent.length>10)e.textContent=L.cta_wl_sub;
+  });
+
+  // WL buttons in CTA
+  const wlBtns=document.querySelectorAll('.cta .btn-hero');
+  if(wlBtns[0])wlBtns[0].textContent=L.btn_join_wl;
+  if(wlBtns[1])wlBtns[1].textContent=L.btn_view_wl;
+
+  // Social pills
+  const pills=document.querySelectorAll('.sp');
+  if(pills[0])pills[0].innerHTML=pills[0].innerHTML.replace(/Follow on X|Seguir en X|[^\s<]+$/,L.follow_x);
+  // simpler: just update text nodes
+  pills.forEach((p,i)=>{
+    const keys=['follow_x','telegram','discord','whitepaper'];
+    if(keys[i]&&L[keys[i]]){
+      const svg=p.querySelector('svg');
+      if(svg){p.innerHTML='';p.appendChild(svg);p.append(' '+L[keys[i]]);}
+    }
+  });
+
+  // Footer
+  qt('.f-copy',L.footer_copy);
+  const flinks=document.querySelectorAll('.f-links a');
+  if(flinks[0])flinks[0].textContent=L.terms;
+  if(flinks[1])flinks[1].textContent=L.privacy;
+  if(flinks[2])flinks[2].textContent=L.whitepaper;
+}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#lang-sw')){
+    document.getElementById('lang-btn')?.classList.remove('open');
+    document.getElementById('lang-dd')?.classList.remove('open');
+  }
+});
+
+document.addEventListener('DOMContentLoaded',()=>{ setL(curL); });
+</script>
 </body>
 </html>

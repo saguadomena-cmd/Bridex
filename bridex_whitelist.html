@@ -36,6 +36,27 @@ nav{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:cente
 .logo-name b{color:var(--gold);}
 .nav-back{font-size:12px;color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
 .nav-back:hover{color:var(--gold);}
+.nav-right-group{display:flex;align-items:center;gap:12px;}
+
+/* LANGUAGE SWITCHER */
+.lang-switcher{position:relative;}
+.lang-btn{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:6px 12px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);transition:all .2s;white-space:nowrap;}
+.lang-btn:hover{border-color:var(--gold-bdr);color:var(--gold);}
+.lang-btn .flag{font-size:14px;line-height:1;}
+.lang-btn .lang-name{letter-spacing:.5px;}
+.lang-btn .chevron{transition:transform .2s;font-size:8px;color:var(--text3);}
+.lang-btn.open .chevron{transform:rotate(180deg);}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.6);z-index:999;min-width:200px;display:none;}
+.lang-dropdown.open{display:block;animation:slideIn .15s ease both;}
+.lang-group-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;padding:10px 14px 4px;}
+.lang-option{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background .15s;font-size:13px;color:var(--text2);}
+.lang-option:hover{background:var(--bg3);color:var(--text);}
+.lang-option.active{background:var(--gold-dim);color:var(--gold);}
+.lang-option .lo-flag{font-size:16px;width:22px;text-align:center;}
+.lang-option .lo-name{flex:1;font-weight:500;}
+.lang-option .lo-native{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.lang-option.active .lo-native{color:var(--gold-dk);}
+.lang-sep{height:1px;background:var(--border);}
 
 /* TICKER */
 .ticker{height:28px;overflow:hidden;display:flex;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);}
@@ -177,10 +198,41 @@ nav{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:cente
     </div>
     <span class="logo-name"><b>BRID</b>EX</span>
   </a>
-  <a class="nav-back" href="bridex_v4.html">
-    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Back to main site
-  </a>
+  <div class="nav-right-group">
+    <a class="nav-back" href="bridex_v4.html">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <span data-i18n="nav_back">Back to main site</span>
+    </a>
+    <div class="lang-switcher" id="lang-switcher">
+      <button class="lang-btn" id="lang-btn" onclick="toggleLang()">
+        <span class="flag" id="current-flag">🇬🇧</span>
+        <span class="lang-name" id="current-lang">EN</span>
+        <span class="chevron">▼</span>
+      </button>
+      <div class="lang-dropdown" id="lang-dropdown">
+        <div class="lang-group-label">Popular</div>
+        <div class="lang-option active" onclick="setLang('en')"><span class="lo-flag">🇬🇧</span><span class="lo-name">English</span><span class="lo-native">English</span></div>
+        <div class="lang-option" onclick="setLang('es')"><span class="lo-flag">🇪🇸</span><span class="lo-name">Spanish</span><span class="lo-native">Español</span></div>
+        <div class="lang-option" onclick="setLang('zh')"><span class="lo-flag">🇨🇳</span><span class="lo-name">Chinese</span><span class="lo-native">中文</span></div>
+        <div class="lang-option" onclick="setLang('ar')"><span class="lo-flag">🇸🇦</span><span class="lo-name">Arabic</span><span class="lo-native">العربية</span></div>
+        <div class="lang-option" onclick="setLang('pt')"><span class="lo-flag">🇧🇷</span><span class="lo-name">Portuguese</span><span class="lo-native">Português</span></div>
+        <div class="lang-option" onclick="setLang('ru')"><span class="lo-flag">🇷🇺</span><span class="lo-name">Russian</span><span class="lo-native">Русский</span></div>
+        <div class="lang-sep"></div>
+        <div class="lang-group-label">Europe</div>
+        <div class="lang-option" onclick="setLang('de')"><span class="lo-flag">🇩🇪</span><span class="lo-name">German</span><span class="lo-native">Deutsch</span></div>
+        <div class="lang-option" onclick="setLang('fr')"><span class="lo-flag">🇫🇷</span><span class="lo-name">French</span><span class="lo-native">Français</span></div>
+        <div class="lang-option" onclick="setLang('it')"><span class="lo-flag">🇮🇹</span><span class="lo-name">Italian</span><span class="lo-native">Italiano</span></div>
+        <div class="lang-option" onclick="setLang('tr')"><span class="lo-flag">🇹🇷</span><span class="lo-name">Turkish</span><span class="lo-native">Türkçe</span></div>
+        <div class="lang-option" onclick="setLang('pl')"><span class="lo-flag">🇵🇱</span><span class="lo-name">Polish</span><span class="lo-native">Polski</span></div>
+        <div class="lang-sep"></div>
+        <div class="lang-group-label">Asia</div>
+        <div class="lang-option" onclick="setLang('ja')"><span class="lo-flag">🇯🇵</span><span class="lo-name">Japanese</span><span class="lo-native">日本語</span></div>
+        <div class="lang-option" onclick="setLang('ko')"><span class="lo-flag">🇰🇷</span><span class="lo-name">Korean</span><span class="lo-native">한국어</span></div>
+        <div class="lang-option" onclick="setLang('vi')"><span class="lo-flag">🇻🇳</span><span class="lo-name">Vietnamese</span><span class="lo-native">Tiếng Việt</span></div>
+        <div class="lang-option" onclick="setLang('id')"><span class="lo-flag">🇮🇩</span><span class="lo-name">Indonesian</span><span class="lo-native">Bahasa Indonesia</span></div>
+      </div>
+    </div>
+  </div>
 </nav>
 
 <div class="ticker">
@@ -619,6 +671,403 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('inp-wallet').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('inp-email').focus();
   });
+});
+</script>
+
+<script>
+// ── TRANSLATIONS ─────────────────────────────────────────
+const LANGS = {
+  en: {
+    flag:'🇬🇧', name:'EN', dir:'ltr',
+    nav_back:'Back to main site',
+    wl_badge:'Whitelist — IDO 2026',
+    hero_h1:'Register your wallet.<br><span>Secure your BRIK.</span>',
+    hero_p:'Register your XRPL wallet address to join the BRIDEX IDO whitelist. Your wallet will be publicly listed — partially masked for security — so you can verify your participation at any time.',
+    hero_note:'All addresses are public · Partially masked · Verifiable by any user',
+    stat_wallets:'Wallets registered', stat_brik:'BRIK reserved', stat_eur:'EUR committed', stat_pct:'Of IDO allocation',
+    form_title:'REGISTER WALLET', form_step:'STEP 1 OF 2',
+    lbl_wallet:'XRPL Wallet address', hint_wallet:'Must start with "r" — your XRP Ledger address (Xaman wallet)',
+    lbl_email:'Your email (private, never shown)', hint_email:'Used only to confirm your registration. Never shared publicly.',
+    lbl_amount:'BRIK amount you intend to buy', amt_select:'Select amount',
+    lbl_type:'Investor type', type_retail:'Retail investor', type_inst:'Institutional / Family office', type_dev:'Real estate developer', type_lp:'Liquidity provider',
+    chk_terms:'I understand that registering on the whitelist does not guarantee allocation. Final participation requires KYC/AML verification at IDO launch. I accept the <a href="#">Terms & Conditions</a>.',
+    chk_public:'I accept that my wallet address will be listed publicly in masked form on the BRIDEX whitelist page, verifiable by any user.',
+    btn_register:'Register on Whitelist', btn_registering:'Registering...',
+    verify_title:'VERIFY YOUR POSITION', lbl_verify:'Enter your wallet address', hint_verify:'Enter your full wallet address to check your registration status and position.',
+    btn_verify:'Check my registration',
+    howto_title:'HOW IT WORKS',
+    how1_title:'Register your XRPL wallet', how1_desc:'Submit your address to secure your whitelist position. Earlier = better position.',
+    how2_title:'Your address is listed publicly', how2_desc:'Masked for security: first 5 + last 5 characters visible. Anyone can verify their own participation.',
+    how3_title:'Complete KYC at IDO launch', how3_desc:'When the IDO opens, whitelisted wallets complete KYC/AML and receive priority allocation of BRIK tokens.',
+    list_title:'PUBLIC WHITELIST — ALL REGISTERED WALLETS',
+    list_search:'Search by masked address...', list_showing:'Showing', list_of:'of', list_wallets:'wallets',
+    list_export:'↓ Export CSV',
+    th_num:'#', th_wallet:'Wallet (masked)', th_network:'Network', th_brik:'BRIK reserved', th_date:'Registered', th_status:'Status',
+    status_confirmed:'CONFIRMED', status_pending:'PENDING KYC',
+    empty:'No wallets registered yet. Be the first!', empty_search:'No wallets found.',
+    page_prev:'← Prev', page_next:'Next →', page_of:'Page',
+    success_title:"You're on the whitelist!", success_desc:'Your wallet has been registered successfully. Keep this page bookmarked to verify your position at any time.',
+    success_pos_lbl:'Your position in the whitelist',
+    btn_another:'Register another wallet',
+    vf_found:'✓ Wallet found on whitelist', vf_pos:'Position', vf_brik:'BRIK reserved', vf_eur:'EUR committed', vf_date:'Registered', vf_status:'Status', vf_pending:'Pending KYC', vf_masked:'Masked public address:',
+    vf_not:'✗ Wallet not found', vf_not_desc:'This address is not registered on the BRIDEX whitelist. Register above to secure your position.',
+    disclaimer:'Registering on the whitelist does not guarantee IDO allocation. Wallet addresses are displayed in masked form (first 5 + last 5 characters) for security. Full addresses are never displayed publicly. Registration is non-binding — final participation requires KYC/AML verification at IDO launch. This is not financial advice.',
+    err_wallet:'Invalid wallet address. Must start with "r" and be 25-50 characters.',
+    err_exists:'This wallet is already registered on the whitelist.',
+    err_email:'Please enter a valid email address.', err_amount:'Please select a BRIK amount.',
+    err_terms:'Please accept the Terms & Conditions.', err_public:'Please accept that your masked wallet will be publicly listed.',
+    hint_amount:'Non-binding. Helps us plan IDO distribution.',
+  },
+  es: {
+    flag:'🇪🇸', name:'ES', dir:'ltr',
+    nav_back:'Volver al sitio principal',
+    wl_badge:'Lista blanca — IDO 2026',
+    hero_h1:'Registra tu cartera.<br><span>Asegura tu BRIK.</span>',
+    hero_p:'Registra tu dirección de cartera XRPL para unirte a la lista blanca del IDO de BRIDEX. Tu cartera se mostrará públicamente enmascarada para que puedas verificar tu participación en cualquier momento.',
+    hero_note:'Todas las direcciones son públicas · Parcialmente enmascaradas · Verificables por cualquier usuario',
+    stat_wallets:'Carteras registradas', stat_brik:'BRIK reservados', stat_eur:'EUR comprometidos', stat_pct:'Del IDO asignado',
+    form_title:'REGISTRAR CARTERA', form_step:'PASO 1 DE 2',
+    lbl_wallet:'Dirección cartera XRPL', hint_wallet:'Debe empezar por "r" — tu dirección XRP Ledger (cartera Xaman)',
+    lbl_email:'Tu email (privado, nunca visible)', hint_email:'Solo para confirmar tu registro. Nunca se comparte públicamente.',
+    lbl_amount:'Cantidad de BRIK que pretendes comprar', amt_select:'Selecciona cantidad',
+    lbl_type:'Tipo de inversor', type_retail:'Inversor minorista', type_inst:'Institucional / Family office', type_dev:'Promotor inmobiliario', type_lp:'Proveedor de liquidez',
+    chk_terms:'Entiendo que registrarme en la lista blanca no garantiza asignación. La participación final requiere verificación KYC/AML en el lanzamiento del IDO. Acepto los <a href="#">Términos y Condiciones</a>.',
+    chk_public:'Acepto que mi dirección de cartera se liste públicamente de forma enmascarada en la página de lista blanca de BRIDEX, verificable por cualquier usuario.',
+    btn_register:'Registrarse en la Lista Blanca', btn_registering:'Registrando...',
+    verify_title:'VERIFICA TU POSICIÓN', lbl_verify:'Introduce tu dirección de cartera', hint_verify:'Introduce tu dirección completa para comprobar tu estado de registro y posición.',
+    btn_verify:'Comprobar mi registro',
+    howto_title:'CÓMO FUNCIONA',
+    how1_title:'Registra tu cartera XRPL', how1_desc:'Envía tu dirección para asegurar tu posición. Cuanto antes, mejor posición.',
+    how2_title:'Tu dirección se lista públicamente', how2_desc:'Enmascarada por seguridad: primeros 5 + últimos 5 caracteres visibles. Cualquiera puede verificar su propia participación.',
+    how3_title:'Completa el KYC en el lanzamiento', how3_desc:'Cuando abra el IDO, las carteras en lista blanca completan KYC/AML y reciben asignación prioritaria de tokens BRIK.',
+    list_title:'LISTA BLANCA PÚBLICA — TODAS LAS CARTERAS',
+    list_search:'Buscar por dirección enmascarada...', list_showing:'Mostrando', list_of:'de', list_wallets:'carteras',
+    list_export:'↓ Exportar CSV',
+    th_num:'#', th_wallet:'Cartera (enmascarada)', th_network:'Red', th_brik:'BRIK reservados', th_date:'Registrado', th_status:'Estado',
+    status_confirmed:'CONFIRMADO', status_pending:'KYC PENDIENTE',
+    empty:'Sin carteras registradas. ¡Sé el primero!', empty_search:'No se encontraron carteras.',
+    page_prev:'← Ant.', page_next:'Sig. →', page_of:'Página',
+    success_title:'¡Estás en la lista blanca!', success_desc:'Tu cartera se ha registrado con éxito. Guarda esta página para verificar tu posición en cualquier momento.',
+    success_pos_lbl:'Tu posición en la lista blanca',
+    btn_another:'Registrar otra cartera',
+    vf_found:'✓ Cartera encontrada en la lista blanca', vf_pos:'Posición', vf_brik:'BRIK reservados', vf_eur:'EUR comprometidos', vf_date:'Registrado', vf_status:'Estado', vf_pending:'KYC pendiente', vf_masked:'Dirección pública enmascarada:',
+    vf_not:'✗ Cartera no encontrada', vf_not_desc:'Esta dirección no está registrada en la lista blanca de BRIDEX. Regístrate arriba para asegurar tu posición.',
+    disclaimer:'Registrarse en la lista blanca no garantiza asignación en el IDO. Las direcciones se muestran enmascaradas (primeros 5 + últimos 5 caracteres). Registro no vinculante — la participación final requiere verificación KYC/AML. Esto no es asesoramiento financiero.',
+    err_wallet:'Dirección de cartera inválida. Debe empezar por "r" y tener 25-50 caracteres.',
+    err_exists:'Esta cartera ya está registrada en la lista blanca.',
+    err_email:'Introduce un email válido.', err_amount:'Selecciona una cantidad de BRIK.',
+    err_terms:'Acepta los Términos y Condiciones.', err_public:'Acepta que tu cartera enmascarada se liste públicamente.',
+    hint_amount:'No vinculante. Nos ayuda a planificar la distribución del IDO.',
+  },
+  zh: {
+    flag:'🇨🇳', name:'中文', dir:'ltr',
+    nav_back:'返回主站',
+    wl_badge:'白名单 — IDO 2026',
+    hero_h1:'注册您的钱包。<br><span>锁定您的 BRIK。</span>',
+    hero_p:'注册您的 XRPL 钱包地址，加入 BRIDEX IDO 白名单。您的钱包将以部分隐藏的形式公开展示，以便您随时验证您的参与情况。',
+    hero_note:'所有地址公开 · 部分隐藏 · 任何用户可验证',
+    stat_wallets:'已注册钱包', stat_brik:'已预留 BRIK', stat_eur:'已承诺欧元', stat_pct:'IDO 分配占比',
+    form_title:'注册钱包', form_step:'第 1 步，共 2 步',
+    lbl_wallet:'XRPL 钱包地址', hint_wallet:'必须以 "r" 开头 — 您的 XRP Ledger 地址（Xaman 钱包）',
+    lbl_email:'您的邮箱（私密，不对外显示）', hint_email:'仅用于确认注册，不会公开分享。',
+    lbl_amount:'您打算购买的 BRIK 数量', amt_select:'选择数量',
+    lbl_type:'投资者类型', type_retail:'散户投资者', type_inst:'机构 / 家族办公室', type_dev:'房地产开发商', type_lp:'流动性提供者',
+    chk_terms:'我了解注册白名单不保证分配。最终参与需要在 IDO 启动时完成 KYC/AML 验证。我接受 <a href="#">条款与条件</a>。',
+    chk_public:'我接受我的钱包地址将以隐藏形式公开列于 BRIDEX 白名单页面，任何用户均可验证。',
+    btn_register:'注册白名单', btn_registering:'注册中...',
+    verify_title:'验证您的位置', lbl_verify:'输入您的钱包地址', hint_verify:'输入完整地址以检查注册状态和位置。',
+    btn_verify:'检查我的注册',
+    howto_title:'如何运作',
+    how1_title:'注册您的 XRPL 钱包', how1_desc:'提交您的地址以确保白名单位置。越早注册，位置越靠前。',
+    how2_title:'您的地址将公开列出', how2_desc:'为安全起见进行隐藏：显示前5位+后5位字符。任何人都可以验证自己的参与情况。',
+    how3_title:'在 IDO 启动时完成 KYC', how3_desc:'IDO 开启时，白名单钱包完成 KYC/AML 并获得 BRIK 代币的优先分配。',
+    list_title:'公开白名单 — 所有已注册钱包',
+    list_search:'按隐藏地址搜索...', list_showing:'显示', list_of:'/', list_wallets:'个钱包',
+    list_export:'↓ 导出 CSV',
+    th_num:'#', th_wallet:'钱包（隐藏）', th_network:'网络', th_brik:'预留 BRIK', th_date:'注册时间', th_status:'状态',
+    status_confirmed:'已确认', status_pending:'待 KYC',
+    empty:'暂无注册钱包，成为第一个！', empty_search:'未找到钱包。',
+    page_prev:'← 上一页', page_next:'下一页 →', page_of:'第',
+    success_title:'您已加入白名单！', success_desc:'您的钱包已成功注册。请收藏此页面以便随时验证您的位置。',
+    success_pos_lbl:'您在白名单中的位置',
+    btn_another:'注册另一个钱包',
+    vf_found:'✓ 在白名单中找到钱包', vf_pos:'位置', vf_brik:'预留 BRIK', vf_eur:'承诺欧元', vf_date:'注册时间', vf_status:'状态', vf_pending:'待 KYC', vf_masked:'隐藏公开地址：',
+    vf_not:'✗ 未找到钱包', vf_not_desc:'该地址未在 BRIDEX 白名单中注册。请在上方注册以确保您的位置。',
+    disclaimer:'注册白名单不保证 IDO 分配。钱包地址以隐藏形式显示（前5位+后5位）。注册不具约束力——最终参与需要 KYC/AML 验证。这不是财务建议。',
+    err_wallet:'钱包地址无效。必须以 "r" 开头，长度为 25-50 个字符。',
+    err_exists:'此钱包已注册在白名单中。',
+    err_email:'请输入有效的邮箱地址。', err_amount:'请选择 BRIK 数量。',
+    err_terms:'请接受条款与条件。', err_public:'请接受您的隐藏钱包将公开列出。',
+    hint_amount:'非约束性。帮助我们规划 IDO 分配。',
+  },
+  ar: {
+    flag:'🇸🇦', name:'AR', dir:'rtl',
+    nav_back:'العودة إلى الموقع الرئيسي',
+    wl_badge:'القائمة البيضاء — IDO 2026',
+    hero_h1:'سجّل محفظتك.<br><span>احجز BRIK الخاص بك.</span>',
+    hero_p:'سجّل عنوان محفظة XRPL الخاصة بك للانضمام إلى القائمة البيضاء لـ BRIDEX IDO. ستُعرض محفظتك بشكل عام مع إخفاء جزئي للأمان حتى تتمكن من التحقق من مشاركتك في أي وقت.',
+    hero_note:'جميع العناوين عامة · مخفية جزئياً · قابلة للتحقق من قبل أي مستخدم',
+    stat_wallets:'المحافظ المسجلة', stat_brik:'BRIK محجوز', stat_eur:'يورو ملتزم', stat_pct:'من تخصيص IDO',
+    form_title:'تسجيل المحفظة', form_step:'الخطوة 1 من 2',
+    lbl_wallet:'عنوان محفظة XRPL', hint_wallet:'يجب أن يبدأ بـ "r" — عنوان XRP Ledger الخاص بك',
+    lbl_email:'بريدك الإلكتروني (خاص، لن يُعرض أبداً)', hint_email:'يُستخدم فقط لتأكيد تسجيلك. لن يُشارك علنياً.',
+    lbl_amount:'كمية BRIK التي تعتزم شراءها', amt_select:'اختر الكمية',
+    lbl_type:'نوع المستثمر', type_retail:'مستثمر أفراد', type_inst:'مؤسسي / مكتب عائلي', type_dev:'مطور عقاري', type_lp:'مزود سيولة',
+    chk_terms:'أفهم أن التسجيل في القائمة البيضاء لا يضمن التخصيص. المشاركة النهائية تتطلب التحقق KYC/AML. أقبل <a href="#">الشروط والأحكام</a>.',
+    chk_public:'أقبل أن عنوان محفظتي سيُدرج علنياً بصيغة مخفية في صفحة القائمة البيضاء لـ BRIDEX.',
+    btn_register:'التسجيل في القائمة البيضاء', btn_registering:'جارٍ التسجيل...',
+    verify_title:'تحقق من موقعك', lbl_verify:'أدخل عنوان محفظتك', hint_verify:'أدخل عنوانك الكامل للتحقق من حالة التسجيل وموقعك.',
+    btn_verify:'التحقق من تسجيلي',
+    howto_title:'كيف يعمل',
+    how1_title:'سجّل محفظة XRPL الخاصة بك', how1_desc:'أرسل عنوانك لتأمين موقعك في القائمة البيضاء. كلما كان التسجيل أبكر، كان الموقع أفضل.',
+    how2_title:'عنوانك يُدرج علناً', how2_desc:'مخفي للأمان: أول 5 + آخر 5 أحرف مرئية. يمكن لأي شخص التحقق من مشاركته.',
+    how3_title:'أكمل KYC عند إطلاق IDO', how3_desc:'عند فتح IDO، تكمل المحافظ في القائمة البيضاء KYC/AML وتحصل على تخصيص أولوية من رموز BRIK.',
+    list_title:'القائمة البيضاء العامة — جميع المحافظ المسجلة',
+    list_search:'البحث بالعنوان المخفي...', list_showing:'عرض', list_of:'من', list_wallets:'محافظ',
+    list_export:'↓ تصدير CSV',
+    th_num:'#', th_wallet:'المحفظة (مخفية)', th_network:'الشبكة', th_brik:'BRIK محجوز', th_date:'تاريخ التسجيل', th_status:'الحالة',
+    status_confirmed:'مؤكد', status_pending:'KYC معلّق',
+    empty:'لا توجد محافظ مسجلة بعد. كن الأول!', empty_search:'لم يتم العثور على محافظ.',
+    page_prev:'← السابق', page_next:'التالي →', page_of:'صفحة',
+    success_title:'أنت في القائمة البيضاء!', success_desc:'تم تسجيل محفظتك بنجاح. احفظ هذه الصفحة للتحقق من موقعك في أي وقت.',
+    success_pos_lbl:'موقعك في القائمة البيضاء',
+    btn_another:'تسجيل محفظة أخرى',
+    vf_found:'✓ تم العثور على المحفظة في القائمة البيضاء', vf_pos:'الموقع', vf_brik:'BRIK محجوز', vf_eur:'يورو ملتزم', vf_date:'تاريخ التسجيل', vf_status:'الحالة', vf_pending:'KYC معلّق', vf_masked:'العنوان العام المخفي:',
+    vf_not:'✗ المحفظة غير موجودة', vf_not_desc:'هذا العنوان غير مسجل في القائمة البيضاء لـ BRIDEX. سجّل أعلاه لتأمين موقعك.',
+    disclaimer:'التسجيل في القائمة البيضاء لا يضمن تخصيص IDO. تُعرض عناوين المحافظ بصيغة مخفية (أول 5 + آخر 5 أحرف). التسجيل غير ملزم. هذه ليست نصيحة مالية.',
+    err_wallet:'عنوان المحفظة غير صالح. يجب أن يبدأ بـ "r" ويكون 25-50 حرفاً.',
+    err_exists:'هذه المحفظة مسجلة بالفعل في القائمة البيضاء.',
+    err_email:'أدخل عنوان بريد إلكتروني صالحاً.', err_amount:'اختر كمية BRIK.',
+    err_terms:'اقبل الشروط والأحكام.', err_public:'اقبل أن محفظتك المخفية ستُدرج علناً.',
+    hint_amount:'غير ملزم. يساعدنا على تخطيط توزيع IDO.',
+  },
+  pt: {
+    flag:'🇧🇷', name:'PT', dir:'ltr',
+    nav_back:'Voltar ao site principal',
+    wl_badge:'Lista branca — IDO 2026',
+    hero_h1:'Registe a sua carteira.<br><span>Garanta o seu BRIK.</span>',
+    hero_p:'Registe o endereço da sua carteira XRPL para aderir à lista branca do IDO da BRIDEX. A sua carteira será listada publicamente — parcialmente mascarada por segurança.',
+    hero_note:'Todos os endereços são públicos · Parcialmente mascarados · Verificáveis por qualquer utilizador',
+    stat_wallets:'Carteiras registadas', stat_brik:'BRIK reservados', stat_eur:'EUR comprometidos', stat_pct:'Da alocação IDO',
+    form_title:'REGISTAR CARTEIRA', form_step:'PASSO 1 DE 2',
+    lbl_wallet:'Endereço carteira XRPL', hint_wallet:'Deve começar por "r" — o seu endereço XRP Ledger',
+    lbl_email:'O seu email (privado, nunca exibido)', hint_email:'Usado apenas para confirmar o registo. Nunca partilhado publicamente.',
+    lbl_amount:'Quantidade de BRIK que pretende comprar', amt_select:'Selecionar quantidade',
+    lbl_type:'Tipo de investidor', type_retail:'Investidor de retalho', type_inst:'Institucional / Family office', type_dev:'Promotor imobiliário', type_lp:'Fornecedor de liquidez',
+    chk_terms:'Entendo que o registo não garante alocação. A participação final requer verificação KYC/AML no lançamento do IDO. Aceito os <a href="#">Termos e Condições</a>.',
+    chk_public:'Aceito que o meu endereço de carteira seja listado publicamente de forma mascarada na página da lista branca da BRIDEX.',
+    btn_register:'Registar na Lista Branca', btn_registering:'A registar...',
+    verify_title:'VERIFIQUE A SUA POSIÇÃO', lbl_verify:'Introduza o endereço da sua carteira', hint_verify:'Introduza o endereço completo para verificar o estado do registo.',
+    btn_verify:'Verificar o meu registo',
+    howto_title:'COMO FUNCIONA',
+    how1_title:'Registe a sua carteira XRPL', how1_desc:'Envie o seu endereço para garantir a sua posição. Quanto mais cedo, melhor posição.',
+    how2_title:'O seu endereço é listado publicamente', how2_desc:'Mascarado por segurança: primeiros 5 + últimos 5 caracteres visíveis.',
+    how3_title:'Complete o KYC no lançamento do IDO', how3_desc:'Quando o IDO abrir, as carteiras na lista branca completam KYC/AML e recebem alocação prioritária de tokens BRIK.',
+    list_title:'LISTA BRANCA PÚBLICA — TODAS AS CARTEIRAS',
+    list_search:'Pesquisar por endereço mascarado...', list_showing:'A mostrar', list_of:'de', list_wallets:'carteiras',
+    list_export:'↓ Exportar CSV',
+    th_num:'#', th_wallet:'Carteira (mascarada)', th_network:'Rede', th_brik:'BRIK reservados', th_date:'Registado', th_status:'Estado',
+    status_confirmed:'CONFIRMADO', status_pending:'KYC PENDENTE',
+    empty:'Sem carteiras registadas. Seja o primeiro!', empty_search:'Nenhuma carteira encontrada.',
+    page_prev:'← Ant.', page_next:'Próx. →', page_of:'Página',
+    success_title:'Está na lista branca!', success_desc:'A sua carteira foi registada com sucesso.',
+    success_pos_lbl:'A sua posição na lista branca',
+    btn_another:'Registar outra carteira',
+    vf_found:'✓ Carteira encontrada na lista branca', vf_pos:'Posição', vf_brik:'BRIK reservados', vf_eur:'EUR comprometidos', vf_date:'Registado', vf_status:'Estado', vf_pending:'KYC pendente', vf_masked:'Endereço público mascarado:',
+    vf_not:'✗ Carteira não encontrada', vf_not_desc:'Este endereço não está registado na lista branca da BRIDEX.',
+    disclaimer:'O registo na lista branca não garante alocação no IDO. Os endereços são exibidos mascarados. Não é aconselhamento financeiro.',
+    err_wallet:'Endereço de carteira inválido. Deve começar por "r" e ter 25-50 caracteres.',
+    err_exists:'Esta carteira já está registada na lista branca.',
+    err_email:'Introduza um endereço de email válido.', err_amount:'Selecione uma quantidade de BRIK.',
+    err_terms:'Aceite os Termos e Condições.', err_public:'Aceite que a sua carteira mascarada será listada publicamente.',
+    hint_amount:'Não vinculativo. Ajuda-nos a planear a distribuição do IDO.',
+  },
+  ru: {
+    flag:'🇷🇺', name:'RU', dir:'ltr',
+    nav_back:'Вернуться на главный сайт',
+    wl_badge:'Белый список — IDO 2026',
+    hero_h1:'Зарегистрируйте кошелёк.<br><span>Зафиксируйте свой BRIK.</span>',
+    hero_p:'Зарегистрируйте адрес кошелька XRPL, чтобы попасть в белый список IDO BRIDEX. Ваш кошелёк будет публично размещён — частично скрыт для безопасности.',
+    hero_note:'Все адреса публичны · Частично скрыты · Проверяемые любым пользователем',
+    stat_wallets:'Зарегистрированных кошельков', stat_brik:'BRIK зарезервировано', stat_eur:'EUR обязательств', stat_pct:'От аллокации IDO',
+    form_title:'РЕГИСТРАЦИЯ КОШЕЛЬКА', form_step:'ШАГ 1 ИЗ 2',
+    lbl_wallet:'Адрес кошелька XRPL', hint_wallet:'Должен начинаться с "r" — ваш адрес XRP Ledger',
+    lbl_email:'Email (приватный, никогда не отображается)', hint_email:'Используется только для подтверждения регистрации.',
+    lbl_amount:'Количество BRIK, которое вы планируете купить', amt_select:'Выберите количество',
+    lbl_type:'Тип инвестора', type_retail:'Розничный инвестор', type_inst:'Институциональный / Family office', type_dev:'Девелопер недвижимости', type_lp:'Поставщик ликвидности',
+    chk_terms:'Я понимаю, что регистрация не гарантирует аллокацию. Для участия требуется KYC/AML. Я принимаю <a href="#">Условия</a>.',
+    chk_public:'Я соглашаюсь, что мой адрес кошелька будет публично размещён в скрытом виде на странице белого списка BRIDEX.',
+    btn_register:'Зарегистрироваться в белом списке', btn_registering:'Регистрация...',
+    verify_title:'ПРОВЕРЬТЕ СВОЮ ПОЗИЦИЮ', lbl_verify:'Введите адрес кошелька', hint_verify:'Введите полный адрес для проверки статуса регистрации.',
+    btn_verify:'Проверить мою регистрацию',
+    howto_title:'КАК ЭТО РАБОТАЕТ',
+    how1_title:'Зарегистрируйте кошелёк XRPL', how1_desc:'Подайте адрес, чтобы занять позицию в белом списке. Раньше — лучше позиция.',
+    how2_title:'Ваш адрес публично размещается', how2_desc:'Скрыт для безопасности: первые 5 + последние 5 символов видны.',
+    how3_title:'Пройдите KYC при запуске IDO', how3_desc:'Кошельки из белого списка завершают KYC/AML и получают приоритетную аллокацию токенов BRIK.',
+    list_title:'ПУБЛИЧНЫЙ БЕЛЫЙ СПИСОК — ВСЕ КОШЕЛЬКИ',
+    list_search:'Поиск по скрытому адресу...', list_showing:'Показано', list_of:'из', list_wallets:'кошельков',
+    list_export:'↓ Экспорт CSV',
+    th_num:'#', th_wallet:'Кошелёк (скрытый)', th_network:'Сеть', th_brik:'BRIK зарезервировано', th_date:'Зарегистрирован', th_status:'Статус',
+    status_confirmed:'ПОДТВЕРЖДЁН', status_pending:'KYC ОЖИДАЕТСЯ',
+    empty:'Нет зарегистрированных кошельков. Будьте первым!', empty_search:'Кошельки не найдены.',
+    page_prev:'← Пред.', page_next:'След. →', page_of:'Страница',
+    success_title:'Вы в белом списке!', success_desc:'Ваш кошелёк успешно зарегистрирован.',
+    success_pos_lbl:'Ваша позиция в белом списке',
+    btn_another:'Зарегистрировать другой кошелёк',
+    vf_found:'✓ Кошелёк найден в белом списке', vf_pos:'Позиция', vf_brik:'BRIK зарезервировано', vf_eur:'EUR обязательств', vf_date:'Зарегистрирован', vf_status:'Статус', vf_pending:'KYC ожидается', vf_masked:'Публичный скрытый адрес:',
+    vf_not:'✗ Кошелёк не найден', vf_not_desc:'Этот адрес не зарегистрирован в белом списке BRIDEX.',
+    disclaimer:'Регистрация в белом списке не гарантирует аллокацию. Адреса отображаются в скрытом виде. Не является финансовой консультацией.',
+    err_wallet:'Неверный адрес. Должен начинаться с "r", длина 25-50 символов.',
+    err_exists:'Этот кошелёк уже зарегистрирован.',
+    err_email:'Введите корректный email.', err_amount:'Выберите количество BRIK.',
+    err_terms:'Примите условия.', err_public:'Примите публичную публикацию скрытого адреса.',
+    hint_amount:'Необязательно. Помогает нам планировать распределение.',
+  },
+  de: {flag:'🇩🇪',name:'DE',dir:'ltr',nav_back:'Zurück zur Hauptseite',wl_badge:'Whitelist — IDO 2026',hero_h1:'Wallet registrieren.<br><span>BRIK sichern.</span>',hero_p:'Registrieren Sie Ihre XRPL-Wallet-Adresse für die BRIDEX IDO Whitelist. Ihre Wallet wird öffentlich gelistet — teilweise maskiert für Sicherheit.',hero_note:'Alle Adressen öffentlich · Teilweise maskiert · Von jedem überprüfbar',stat_wallets:'Registrierte Wallets',stat_brik:'BRIK reserviert',stat_eur:'EUR zugesagt',stat_pct:'Der IDO-Zuteilung',form_title:'WALLET REGISTRIEREN',form_step:'SCHRITT 1 VON 2',lbl_wallet:'XRPL Wallet-Adresse',hint_wallet:'Muss mit "r" beginnen — Ihre XRP Ledger Adresse',lbl_email:'Ihre E-Mail (privat, nie angezeigt)',hint_email:'Nur zur Bestätigung Ihrer Registrierung verwendet.',lbl_amount:'BRIK-Menge, die Sie kaufen möchten',amt_select:'Menge auswählen',lbl_type:'Investorentyp',type_retail:'Privatanleger',type_inst:'Institutionell / Family Office',type_dev:'Immobilienentwickler',type_lp:'Liquiditätsanbieter',chk_terms:'Ich verstehe, dass die Registrierung keine Zuteilung garantiert. Ich akzeptiere die <a href="#">AGB</a>.',chk_public:'Ich akzeptiere, dass meine Wallet-Adresse maskiert öffentlich gelistet wird.',btn_register:'In Whitelist eintragen',btn_registering:'Wird registriert...',verify_title:'POSITION ÜBERPRÜFEN',lbl_verify:'Wallet-Adresse eingeben',hint_verify:'Geben Sie Ihre vollständige Adresse ein.',btn_verify:'Registrierung prüfen',howto_title:'SO FUNKTIONIERT ES',how1_title:'XRPL Wallet registrieren',how1_desc:'Adresse einreichen — früher ist besser.',how2_title:'Adresse wird öffentlich gelistet',how2_desc:'Maskiert: erste 5 + letzte 5 Zeichen sichtbar.',how3_title:'KYC bei IDO-Start abschließen',how3_desc:'Whitelisted Wallets schließen KYC/AML ab und erhalten BRIK-Tokens.',list_title:'ÖFFENTLICHE WHITELIST',list_search:'Nach maskierter Adresse suchen...',list_showing:'Zeige',list_of:'von',list_wallets:'Wallets',list_export:'↓ CSV exportieren',th_num:'#',th_wallet:'Wallet (maskiert)',th_network:'Netzwerk',th_brik:'BRIK reserviert',th_date:'Registriert',th_status:'Status',status_confirmed:'BESTÄTIGT',status_pending:'KYC AUSSTEHEND',empty:'Keine Wallets registriert. Sei der Erste!',empty_search:'Keine Wallets gefunden.',page_prev:'← Zurück',page_next:'Weiter →',page_of:'Seite',success_title:'Sie sind auf der Whitelist!',success_desc:'Ihre Wallet wurde erfolgreich registriert.',success_pos_lbl:'Ihre Position auf der Whitelist',btn_another:'Weitere Wallet registrieren',vf_found:'✓ Wallet auf Whitelist gefunden',vf_pos:'Position',vf_brik:'BRIK reserviert',vf_eur:'EUR zugesagt',vf_date:'Registriert',vf_status:'Status',vf_pending:'KYC ausstehend',vf_masked:'Öffentliche maskierte Adresse:',vf_not:'✗ Wallet nicht gefunden',vf_not_desc:'Diese Adresse ist nicht auf der BRIDEX Whitelist.',disclaimer:'Keine Garantie auf IDO-Zuteilung. Keine Finanzberatung.',err_wallet:'Ungültige Adresse. Muss mit "r" beginnen, 25-50 Zeichen.',err_exists:'Diese Wallet ist bereits registriert.',err_email:'Gültige E-Mail eingeben.',err_amount:'BRIK-Menge auswählen.',err_terms:'AGB akzeptieren.',err_public:'Öffentliche Listung akzeptieren.',hint_amount:'Unverbindlich. Hilft bei der IDO-Planung.'},
+  fr: {flag:'🇫🇷',name:'FR',dir:'ltr',nav_back:'Retour au site principal',wl_badge:'Liste blanche — IDO 2026',hero_h1:'Enregistrez votre portefeuille.<br><span>Sécurisez vos BRIK.</span>',hero_p:'Enregistrez votre adresse de portefeuille XRPL pour rejoindre la liste blanche IDO de BRIDEX.',hero_note:'Toutes les adresses sont publiques · Partiellement masquées · Vérifiables par tout utilisateur',stat_wallets:'Portefeuilles enregistrés',stat_brik:'BRIK réservés',stat_eur:'EUR engagés',stat_pct:'De l'allocation IDO',form_title:'ENREGISTRER PORTEFEUILLE',form_step:'ÉTAPE 1 SUR 2',lbl_wallet:'Adresse portefeuille XRPL',hint_wallet:'Doit commencer par "r" — votre adresse XRP Ledger',lbl_email:'Votre email (privé, jamais affiché)',hint_email:'Utilisé uniquement pour confirmer votre inscription.',lbl_amount:'Quantité de BRIK que vous souhaitez acheter',amt_select:'Sélectionner la quantité',lbl_type:'Type d'investisseur',type_retail:'Investisseur particulier',type_inst:'Institutionnel / Family office',type_dev:'Promoteur immobilier',type_lp:'Fournisseur de liquidité',chk_terms:'J'accepte les <a href="#">Conditions générales</a>.',chk_public:'J'accepte que mon adresse soit listée publiquement sous forme masquée.',btn_register:'S'inscrire sur la liste blanche',btn_registering:'Inscription...',verify_title:'VÉRIFIEZ VOTRE POSITION',lbl_verify:'Entrez votre adresse de portefeuille',hint_verify:'Entrez votre adresse complète pour vérifier votre statut.',btn_verify:'Vérifier mon inscription',howto_title:'COMMENT ÇA MARCHE',how1_title:'Enregistrez votre portefeuille XRPL',how1_desc:'Soumettez votre adresse — plus tôt = meilleure position.',how2_title:'Votre adresse est listée publiquement',how2_desc:'Masquée: 5 premiers + 5 derniers caractères visibles.',how3_title:'Complétez le KYC au lancement IDO',how3_desc:'Les portefeuilles listés complètent KYC/AML et reçoivent une allocation prioritaire.',list_title:'LISTE BLANCHE PUBLIQUE',list_search:'Rechercher par adresse masquée...',list_showing:'Affichage',list_of:'sur',list_wallets:'portefeuilles',list_export:'↓ Exporter CSV',th_num:'#',th_wallet:'Portefeuille (masqué)',th_network:'Réseau',th_brik:'BRIK réservés',th_date:'Enregistré',th_status:'Statut',status_confirmed:'CONFIRMÉ',status_pending:'KYC EN ATTENTE',empty:'Aucun portefeuille enregistré. Soyez le premier!',empty_search:'Aucun portefeuille trouvé.',page_prev:'← Préc.',page_next:'Suiv. →',page_of:'Page',success_title:'Vous êtes sur la liste blanche!',success_desc:'Votre portefeuille a été enregistré avec succès.',success_pos_lbl:'Votre position sur la liste blanche',btn_another:'Enregistrer un autre portefeuille',vf_found:'✓ Portefeuille trouvé sur la liste blanche',vf_pos:'Position',vf_brik:'BRIK réservés',vf_eur:'EUR engagés',vf_date:'Enregistré',vf_status:'Statut',vf_pending:'KYC en attente',vf_masked:'Adresse publique masquée:',vf_not:'✗ Portefeuille non trouvé',vf_not_desc:'Cette adresse n'est pas sur la liste blanche BRIDEX.',disclaimer:'L'inscription ne garantit pas l'allocation IDO. Pas de conseil financier.',err_wallet:'Adresse invalide. Doit commencer par "r", 25-50 caractères.',err_exists:'Ce portefeuille est déjà enregistré.',err_email:'Email valide requis.',err_amount:'Sélectionnez une quantité de BRIK.',err_terms:'Acceptez les conditions.',err_public:'Acceptez la liste publique masquée.',hint_amount:'Non contraignant. Aide à planifier la distribution.'},
+  it: {flag:'🇮🇹',name:'IT',dir:'ltr',nav_back:'Torna al sito principale',wl_badge:'Lista bianca — IDO 2026',hero_h1:'Registra il tuo wallet.<br><span>Assicura il tuo BRIK.</span>',hero_p:'Registra il tuo indirizzo wallet XRPL per unirti alla lista bianca IDO di BRIDEX.',hero_note:'Tutti gli indirizzi sono pubblici · Parzialmente mascherati · Verificabili da qualsiasi utente',stat_wallets:'Wallet registrati',stat_brik:'BRIK riservati',stat_eur:'EUR impegnati',stat_pct:'Dell'allocazione IDO',form_title:'REGISTRA WALLET',form_step:'PASSO 1 DI 2',lbl_wallet:'Indirizzo wallet XRPL',hint_wallet:'Deve iniziare con "r" — il tuo indirizzo XRP Ledger',lbl_email:'La tua email (privata, mai mostrata)',hint_email:'Usata solo per confermare la registrazione.',lbl_amount:'Quantità di BRIK che intendi acquistare',amt_select:'Seleziona quantità',lbl_type:'Tipo di investitore',type_retail:'Investitore retail',type_inst:'Istituzionale / Family office',type_dev:'Sviluppatore immobiliare',type_lp:'Fornitore di liquidità',chk_terms:'Accetto i <a href="#">Termini e Condizioni</a>.',chk_public:'Accetto che il mio indirizzo wallet sia elencato pubblicamente in forma mascherata.',btn_register:'Iscriviti alla lista bianca',btn_registering:'Registrazione...',verify_title:'VERIFICA LA TUA POSIZIONE',lbl_verify:'Inserisci il tuo indirizzo wallet',hint_verify:'Inserisci il tuo indirizzo completo per verificare lo stato.',btn_verify:'Verifica la mia registrazione',howto_title:'COME FUNZIONA',how1_title:'Registra il tuo wallet XRPL',how1_desc:'Invia il tuo indirizzo — prima è, meglio è.',how2_title:'Il tuo indirizzo viene elencato pubblicamente',how2_desc:'Mascherato: primi 5 + ultimi 5 caratteri visibili.',how3_title:'Completa il KYC al lancio IDO',how3_desc:'I wallet in lista bianca completano KYC/AML e ricevono allocazione prioritaria.',list_title:'LISTA BIANCA PUBBLICA',list_search:'Cerca per indirizzo mascherato...',list_showing:'Mostrando',list_of:'di',list_wallets:'wallet',list_export:'↓ Esporta CSV',th_num:'#',th_wallet:'Wallet (mascherato)',th_network:'Rete',th_brik:'BRIK riservati',th_date:'Registrato',th_status:'Stato',status_confirmed:'CONFERMATO',status_pending:'KYC IN ATTESA',empty:'Nessun wallet registrato. Sii il primo!',empty_search:'Nessun wallet trovato.',page_prev:'← Prec.',page_next:'Succ. →',page_of:'Pagina',success_title:'Sei nella lista bianca!',success_desc:'Il tuo wallet è stato registrato con successo.',success_pos_lbl:'La tua posizione nella lista bianca',btn_another:'Registra un altro wallet',vf_found:'✓ Wallet trovato nella lista bianca',vf_pos:'Posizione',vf_brik:'BRIK riservati',vf_eur:'EUR impegnati',vf_date:'Registrato',vf_status:'Stato',vf_pending:'KYC in attesa',vf_masked:'Indirizzo pubblico mascherato:',vf_not:'✗ Wallet non trovato',vf_not_desc:'Questo indirizzo non è nella lista bianca BRIDEX.',disclaimer:'La registrazione non garantisce l'allocazione IDO. Non è una consulenza finanziaria.',err_wallet:'Indirizzo non valido. Deve iniziare con "r", 25-50 caratteri.',err_exists:'Questo wallet è già registrato.',err_email:'Inserisci un email valida.',err_amount:'Seleziona una quantità di BRIK.',err_terms:'Accetta i termini.',err_public:'Accetta l'elencazione pubblica mascherata.',hint_amount:'Non vincolante. Aiuta a pianificare la distribuzione.'},
+  tr: {flag:'🇹🇷',name:'TR',dir:'ltr',nav_back:'Ana siteye dön',wl_badge:'Beyaz liste — IDO 2026',hero_h1:'Cüzdanını kaydet.<br><span>BRIK'ini güvence altına al.</span>',hero_p:'BRIDEX IDO beyaz listesine katılmak için XRPL cüzdan adresinizi kaydedin.',hero_note:'Tüm adresler herkese açık · Kısmen gizli · Her kullanıcı tarafından doğrulanabilir',stat_wallets:'Kayıtlı cüzdanlar',stat_brik:'BRIK rezerve edildi',stat_eur:'EUR taahhüt edildi',stat_pct:'IDO tahsisinden',form_title:'CÜZDAN KAYDET',form_step:'ADIM 1/2',lbl_wallet:'XRPL Cüzdan adresi',hint_wallet:'"r" ile başlamalıdır — XRP Ledger adresiniz',lbl_email:'E-postanız (gizli, hiçbir zaman gösterilmez)',hint_email:'Yalnızca kaydı onaylamak için kullanılır.',lbl_amount:'Almayı planladığınız BRIK miktarı',amt_select:'Miktar seçin',lbl_type:'Yatırımcı türü',type_retail:'Bireysel yatırımcı',type_inst:'Kurumsal / Aile ofisi',type_dev:'Gayrimenkul geliştirici',type_lp:'Likidite sağlayıcı',chk_terms:'Beyaz listeye kaydolmanın tahsisat garantisi vermediğini anlıyorum. <a href="#">Şartlar ve Koşullar</a>'ı kabul ediyorum.',chk_public:'Cüzdan adresimin gizlenmiş biçimde BRIDEX beyaz liste sayfasında kamuya açık listeleneceğini kabul ediyorum.',btn_register:'Beyaz listeye kaydol',btn_registering:'Kaydediliyor...',verify_title:'KONUMUNUZU DOĞRULAYIN',lbl_verify:'Cüzdan adresinizi girin',hint_verify:'Kayıt durumunuzu kontrol etmek için tam adresinizi girin.',btn_verify:'Kaydımı kontrol et',howto_title:'NASIL ÇALIŞIR',how1_title:'XRPL cüzdanınızı kaydedin',how1_desc:'Adresinizi gönderin — erken kayıt daha iyi sıralama demektir.',how2_title:'Adresiniz kamuya açık listelenir',how2_desc:'Güvenlik için gizli: ilk 5 + son 5 karakter görünür.',how3_title:'IDO lansmanında KYC'yi tamamlayın',how3_desc:'Beyaz listedeki cüzdanlar KYC/AML tamamlar ve öncelikli BRIK tahsisi alır.',list_title:'KAMUYA AÇIK BEYAZ LİSTE',list_search:'Gizlenmiş adrese göre ara...',list_showing:'Gösteriliyor',list_of:'/',list_wallets:'cüzdan',list_export:'↓ CSV dışa aktar',th_num:'#',th_wallet:'Cüzdan (gizlenmiş)',th_network:'Ağ',th_brik:'BRIK rezerve edildi',th_date:'Kayıt tarihi',th_status:'Durum',status_confirmed:'ONAYLANDI',status_pending:'KYC BEKLİYOR',empty:'Henüz kayıtlı cüzdan yok. İlk siz olun!',empty_search:'Cüzdan bulunamadı.',page_prev:'← Önceki',page_next:'Sonraki →',page_of:'Sayfa',success_title:'Beyaz listedesiniz!',success_desc:'Cüzdanınız başarıyla kaydedildi.',success_pos_lbl:'Beyaz listedeki konumunuz',btn_another:'Başka bir cüzdan kaydet',vf_found:'✓ Cüzdan beyaz listede bulundu',vf_pos:'Konum',vf_brik:'BRIK rezerve edildi',vf_eur:'EUR taahhüt edildi',vf_date:'Kayıt tarihi',vf_status:'Durum',vf_pending:'KYC bekliyor',vf_masked:'Gizlenmiş genel adres:',vf_not:'✗ Cüzdan bulunamadı',vf_not_desc:'Bu adres BRIDEX beyaz listesinde kayıtlı değil.',disclaimer:'Beyaz listeye kaydolmak IDO tahsisatını garanti etmez. Finansal tavsiye değildir.',err_wallet:'Geçersiz adres. "r" ile başlamalı, 25-50 karakter.',err_exists:'Bu cüzdan zaten kayıtlı.',err_email:'Geçerli bir e-posta girin.',err_amount:'BRIK miktarı seçin.',err_terms:'Şartları kabul edin.',err_public:'Gizlenmiş adresi kabul edin.',hint_amount:'Bağlayıcı değil. IDO dağıtımını planlamaya yardımcı olur.'},
+  pl: {flag:'🇵🇱',name:'PL',dir:'ltr',nav_back:'Wróć do głównej strony',wl_badge:'Biała lista — IDO 2026',hero_h1:'Zarejestruj portfel.<br><span>Zabezpiecz swój BRIK.</span>',hero_p:'Zarejestruj adres portfela XRPL, aby dołączyć do białej listy IDO BRIDEX.',hero_note:'Wszystkie adresy publiczne · Częściowo zamaskowane · Weryfikowalne przez każdego',stat_wallets:'Zarejestrowane portfele',stat_brik:'BRIK zarezerwowane',stat_eur:'EUR zobowiązane',stat_pct:'Alokacji IDO',form_title:'ZAREJESTRUJ PORTFEL',form_step:'KROK 1 Z 2',lbl_wallet:'Adres portfela XRPL',hint_wallet:'Musi zaczynać się od "r" — adres XRP Ledger',lbl_email:'Twój email (prywatny)',hint_email:'Używany tylko do potwierdzenia rejestracji.',lbl_amount:'Ilość BRIK do zakupu',amt_select:'Wybierz ilość',lbl_type:'Typ inwestora',type_retail:'Inwestor detaliczny',type_inst:'Instytucjonalny / Family office',type_dev:'Deweloper nieruchomości',type_lp:'Dostawca płynności',chk_terms:'Akceptuję <a href="#">Regulamin</a>.',chk_public:'Akceptuję publiczne wylistowanie zamaskowanego adresu.',btn_register:'Zarejestruj się na białej liście',btn_registering:'Rejestracja...',verify_title:'ZWERYFIKUJ SWOJĄ POZYCJĘ',lbl_verify:'Wpisz adres portfela',hint_verify:'Podaj pełny adres aby sprawdzić status.',btn_verify:'Sprawdź moją rejestrację',howto_title:'JAK TO DZIAŁA',how1_title:'Zarejestruj portfel XRPL',how1_desc:'Wcześniej = lepsza pozycja.',how2_title:'Adres jest publicznie listowany',how2_desc:'Zamaskowany: pierwsze 5 + ostatnie 5 znaków widoczne.',how3_title:'Ukończ KYC przy starcie IDO',how3_desc:'Portfele z białej listy kończą KYC/AML i otrzymują priorytetową alokację.',list_title:'PUBLICZNA BIAŁA LISTA',list_search:'Szukaj po zamaskowanym adresie...',list_showing:'Pokazano',list_of:'z',list_wallets:'portfeli',list_export:'↓ Eksport CSV',th_num:'#',th_wallet:'Portfel (zamaskowany)',th_network:'Sieć',th_brik:'BRIK zarezerwowane',th_date:'Zarejestrowany',th_status:'Status',status_confirmed:'POTWIERDZONY',status_pending:'KYC OCZEKUJE',empty:'Brak zarejestrowanych portfeli. Bądź pierwszy!',empty_search:'Nie znaleziono portfeli.',page_prev:'← Poprz.',page_next:'Nast. →',page_of:'Strona',success_title:'Jesteś na białej liście!',success_desc:'Portfel zarejestrowany pomyślnie.',success_pos_lbl:'Twoja pozycja na białej liście',btn_another:'Zarejestruj inny portfel',vf_found:'✓ Portfel znaleziony na białej liście',vf_pos:'Pozycja',vf_brik:'BRIK zarezerwowane',vf_eur:'EUR zobowiązane',vf_date:'Zarejestrowany',vf_status:'Status',vf_pending:'KYC oczekuje',vf_masked:'Publiczny zamaskowany adres:',vf_not:'✗ Portfel nie znaleziony',vf_not_desc:'Ten adres nie jest na białej liście BRIDEX.',disclaimer:'Rejestracja nie gwarantuje alokacji IDO. Nie jest poradą finansową.',err_wallet:'Nieprawidłowy adres. Musi zaczynać się od "r", 25-50 znaków.',err_exists:'Ten portfel jest już zarejestrowany.',err_email:'Podaj prawidłowy email.',err_amount:'Wybierz ilość BRIK.',err_terms:'Zaakceptuj regulamin.',err_public:'Zaakceptuj publiczne listowanie.',hint_amount:'Niewiążące. Pomaga planować dystrybucję.'},
+  ja: {flag:'🇯🇵',name:'日本語',dir:'ltr',nav_back:'メインサイトへ戻る',wl_badge:'ホワイトリスト — IDO 2026',hero_h1:'ウォレットを登録する。<br><span>BRIKを確保する。</span>',hero_p:'XRPLウォレットアドレスを登録して、BRIDEX IDOホワイトリストに参加してください。',hero_note:'全アドレス公開 · 一部マスク · どのユーザーでも確認可能',stat_wallets:'登録済みウォレット',stat_brik:'BRIK予約済み',stat_eur:'EUR確約',stat_pct:'IDO割り当て率',form_title:'ウォレット登録',form_step:'ステップ 1 / 2',lbl_wallet:'XRPLウォレットアドレス',hint_wallet:'"r"で始まる必要があります — XRP LedgerアドレスXaman',lbl_email:'メールアドレス（非公開）',hint_email:'登録確認のみに使用。公開されません。',lbl_amount:'購入予定のBRIK数',amt_select:'数量を選択',lbl_type:'投資家タイプ',type_retail:'個人投資家',type_inst:'機関投資家 / ファミリーオフィス',type_dev:'不動産デベロッパー',type_lp:'流動性プロバイダー',chk_terms:'<a href="#">利用規約</a>に同意します。',chk_public:'ウォレットアドレスがマスクされた形でBRIDEXホワイトリストページに公開されることに同意します。',btn_register:'ホワイトリストに登録',btn_registering:'登録中...',verify_title:'位置を確認する',lbl_verify:'ウォレットアドレスを入力',hint_verify:'登録状況を確認するためにアドレスを入力してください。',btn_verify:'登録を確認する',howto_title:'使い方',how1_title:'XRPLウォレットを登録',how1_desc:'アドレスを送信して位置を確保。早いほど良いポジション。',how2_title:'アドレスが公開リストに追加',how2_desc:'マスク済み: 最初の5文字+最後の5文字が表示。',how3_title:'IDO開始時にKYCを完了',how3_desc:'ホワイトリストのウォレットはKYC/AMLを完了し、BRIKトークンの優先配布を受けます。',list_title:'公開ホワイトリスト',list_search:'マスクアドレスで検索...',list_showing:'表示中',list_of:'/',list_wallets:'ウォレット',list_export:'↓ CSVエクスポート',th_num:'#',th_wallet:'ウォレット（マスク）',th_network:'ネットワーク',th_brik:'BRIK予約',th_date:'登録日',th_status:'ステータス',status_confirmed:'確認済み',status_pending:'KYC待ち',empty:'まだウォレットが登録されていません。最初の1人になりましょう！',empty_search:'ウォレットが見つかりません。',page_prev:'← 前へ',page_next:'次へ →',page_of:'ページ',success_title:'ホワイトリストに登録されました！',success_desc:'ウォレットが正常に登録されました。',success_pos_lbl:'ホワイトリストでの位置',btn_another:'別のウォレットを登録',vf_found:'✓ ウォレットがホワイトリストで見つかりました',vf_pos:'位置',vf_brik:'BRIK予約',vf_eur:'EUR確約',vf_date:'登録日',vf_status:'ステータス',vf_pending:'KYC待ち',vf_masked:'公開マスクアドレス:',vf_not:'✗ ウォレットが見つかりません',vf_not_desc:'このアドレスはBRIDEXホワイトリストに登録されていません。',disclaimer:'ホワイトリスト登録はIDO配布を保証しません。金融アドバイスではありません。',err_wallet:'無効なアドレス。"r"で始まり、25〜50文字である必要があります。',err_exists:'このウォレットはすでに登録されています。',err_email:'有効なメールアドレスを入力してください。',err_amount:'BRIK数量を選択してください。',err_terms:'利用規約に同意してください。',err_public:'公開リストへの掲載に同意してください。',hint_amount:'任意。IDO配布計画に役立ちます。'},
+  ko: {flag:'🇰🇷',name:'한국어',dir:'ltr',nav_back:'메인 사이트로 돌아가기',wl_badge:'화이트리스트 — IDO 2026',hero_h1:'지갑을 등록하세요.<br><span>BRIK를 확보하세요.</span>',hero_p:'BRIDEX IDO 화이트리스트에 참가하려면 XRPL 지갑 주소를 등록하세요.',hero_note:'모든 주소 공개 · 부분 마스킹 · 모든 사용자 확인 가능',stat_wallets:'등록된 지갑',stat_brik:'BRIK 예약됨',stat_eur:'EUR 약정',stat_pct:'IDO 할당 비율',form_title:'지갑 등록',form_step:'1단계 / 2단계',lbl_wallet:'XRPL 지갑 주소',hint_wallet:'"r"로 시작해야 합니다 — XRP Ledger 주소',lbl_email:'이메일 (비공개, 표시되지 않음)',hint_email:'등록 확인에만 사용됩니다.',lbl_amount:'구매 예정 BRIK 수량',amt_select:'수량 선택',lbl_type:'투자자 유형',type_retail:'개인 투자자',type_inst:'기관 / 패밀리 오피스',type_dev:'부동산 개발사',type_lp:'유동성 공급자',chk_terms:'<a href="#">이용약관</a>에 동의합니다.',chk_public:'지갑 주소가 마스킹된 형태로 BRIDEX 화이트리스트 페이지에 공개 등록되는 것에 동의합니다.',btn_register:'화이트리스트 등록',btn_registering:'등록 중...',verify_title:'참여 위치 확인',lbl_verify:'지갑 주소 입력',hint_verify:'등록 상태 확인을 위해 전체 주소를 입력하세요.',btn_verify:'등록 확인',howto_title:'이용 방법',how1_title:'XRPL 지갑 등록',how1_desc:'주소를 제출하여 위치를 확보하세요. 빠를수록 좋습니다.',how2_title:'주소가 공개 목록에 등재',how2_desc:'보안을 위한 마스킹: 처음 5자+마지막 5자 표시.',how3_title:'IDO 출시 시 KYC 완료',how3_desc:'화이트리스트 지갑은 KYC/AML을 완료하고 BRIK 토큰 우선 할당을 받습니다.',list_title:'공개 화이트리스트',list_search:'마스킹된 주소로 검색...',list_showing:'표시 중',list_of:'/',list_wallets:'지갑',list_export:'↓ CSV 내보내기',th_num:'#',th_wallet:'지갑 (마스킹)',th_network:'네트워크',th_brik:'BRIK 예약',th_date:'등록일',th_status:'상태',status_confirmed:'확인됨',status_pending:'KYC 대기',empty:'등록된 지갑이 없습니다. 첫 번째가 되세요!',empty_search:'지갑을 찾을 수 없습니다.',page_prev:'← 이전',page_next:'다음 →',page_of:'페이지',success_title:'화이트리스트에 등록되었습니다!',success_desc:'지갑이 성공적으로 등록되었습니다.',success_pos_lbl:'화이트리스트에서의 순위',btn_another:'다른 지갑 등록',vf_found:'✓ 화이트리스트에서 지갑 찾음',vf_pos:'순위',vf_brik:'BRIK 예약',vf_eur:'EUR 약정',vf_date:'등록일',vf_status:'상태',vf_pending:'KYC 대기',vf_masked:'공개 마스킹 주소:',vf_not:'✗ 지갑을 찾을 수 없음',vf_not_desc:'이 주소는 BRIDEX 화이트리스트에 등록되지 않았습니다.',disclaimer:'화이트리스트 등록은 IDO 할당을 보장하지 않습니다. 재정 조언이 아닙니다.',err_wallet:'유효하지 않은 주소입니다. "r"로 시작하고 25-50자여야 합니다.',err_exists:'이 지갑은 이미 등록되어 있습니다.',err_email:'유효한 이메일을 입력하세요.',err_amount:'BRIK 수량을 선택하세요.',err_terms:'이용약관에 동의하세요.',err_public:'공개 마스킹 등록에 동의하세요.',hint_amount:'비구속적. IDO 배포 계획에 도움이 됩니다.'},
+  vi: {flag:'🇻🇳',name:'VI',dir:'ltr',nav_back:'Quay lại trang chính',wl_badge:'Danh sách trắng — IDO 2026',hero_h1:'Đăng ký ví của bạn.<br><span>Bảo mật BRIK của bạn.</span>',hero_p:'Đăng ký địa chỉ ví XRPL để tham gia danh sách trắng IDO của BRIDEX.',hero_note:'Tất cả địa chỉ đều công khai · Ẩn một phần · Có thể xác minh',stat_wallets:'Ví đã đăng ký',stat_brik:'BRIK đã đặt trước',stat_eur:'EUR cam kết',stat_pct:'Phân bổ IDO',form_title:'ĐĂNG KÝ VÍ',form_step:'BƯỚC 1/2',lbl_wallet:'Địa chỉ ví XRPL',hint_wallet:'Phải bắt đầu bằng "r" — địa chỉ XRP Ledger của bạn',lbl_email:'Email của bạn (riêng tư)',hint_email:'Chỉ dùng để xác nhận đăng ký.',lbl_amount:'Số lượng BRIK dự định mua',amt_select:'Chọn số lượng',lbl_type:'Loại nhà đầu tư',type_retail:'Nhà đầu tư cá nhân',type_inst:'Tổ chức / Family office',type_dev:'Nhà phát triển bất động sản',type_lp:'Nhà cung cấp thanh khoản',chk_terms:'Tôi chấp nhận <a href="#">Điều khoản</a>.',chk_public:'Tôi chấp nhận địa chỉ ví được liệt kê công khai dưới dạng ẩn.',btn_register:'Đăng ký danh sách trắng',btn_registering:'Đang đăng ký...',verify_title:'XÁC MINH VỊ TRÍ',lbl_verify:'Nhập địa chỉ ví',hint_verify:'Nhập địa chỉ đầy đủ để kiểm tra trạng thái.',btn_verify:'Kiểm tra đăng ký',howto_title:'CÁCH HOẠT ĐỘNG',how1_title:'Đăng ký ví XRPL',how1_desc:'Gửi địa chỉ — sớm hơn = vị trí tốt hơn.',how2_title:'Địa chỉ được liệt kê công khai',how2_desc:'Ẩn: 5 ký tự đầu + 5 ký tự cuối hiển thị.',how3_title:'Hoàn thành KYC khi ra mắt IDO',how3_desc:'Ví trong danh sách trắng hoàn thành KYC/AML và nhận phân bổ BRIK ưu tiên.',list_title:'DANH SÁCH TRẮNG CÔNG KHAI',list_search:'Tìm theo địa chỉ ẩn...',list_showing:'Đang hiển thị',list_of:'/',list_wallets:'ví',list_export:'↓ Xuất CSV',th_num:'#',th_wallet:'Ví (ẩn)',th_network:'Mạng',th_brik:'BRIK đặt trước',th_date:'Ngày đăng ký',th_status:'Trạng thái',status_confirmed:'ĐÃ XÁC NHẬN',status_pending:'CHỜ KYC',empty:'Chưa có ví nào. Hãy là người đầu tiên!',empty_search:'Không tìm thấy ví.',page_prev:'← Trước',page_next:'Tiếp →',page_of:'Trang',success_title:'Bạn đã vào danh sách trắng!',success_desc:'Ví của bạn đã được đăng ký thành công.',success_pos_lbl:'Vị trí của bạn trong danh sách',btn_another:'Đăng ký ví khác',vf_found:'✓ Tìm thấy ví trong danh sách',vf_pos:'Vị trí',vf_brik:'BRIK đặt trước',vf_eur:'EUR cam kết',vf_date:'Ngày đăng ký',vf_status:'Trạng thái',vf_pending:'Chờ KYC',vf_masked:'Địa chỉ công khai ẩn:',vf_not:'✗ Không tìm thấy ví',vf_not_desc:'Địa chỉ này chưa đăng ký danh sách trắng BRIDEX.',disclaimer:'Đăng ký không đảm bảo phân bổ IDO. Không phải tư vấn tài chính.',err_wallet:'Địa chỉ không hợp lệ. Phải bắt đầu bằng "r", 25-50 ký tự.',err_exists:'Ví này đã được đăng ký.',err_email:'Nhập email hợp lệ.',err_amount:'Chọn số lượng BRIK.',err_terms:'Chấp nhận điều khoản.',err_public:'Chấp nhận liệt kê công khai.',hint_amount:'Không ràng buộc. Giúp lên kế hoạch phân phối.'},
+  id: {flag:'🇮🇩',name:'ID',dir:'ltr',nav_back:'Kembali ke situs utama',wl_badge:'Daftar putih — IDO 2026',hero_h1:'Daftarkan dompet Anda.<br><span>Amankan BRIK Anda.</span>',hero_p:'Daftarkan alamat dompet XRPL Anda untuk bergabung dengan daftar putih IDO BRIDEX.',hero_note:'Semua alamat publik · Sebagian disembunyikan · Dapat diverifikasi',stat_wallets:'Dompet terdaftar',stat_brik:'BRIK dipesan',stat_eur:'EUR berkomitmen',stat_pct:'Dari alokasi IDO',form_title:'DAFTAR DOMPET',form_step:'LANGKAH 1/2',lbl_wallet:'Alamat dompet XRPL',hint_wallet:'Harus diawali dengan "r" — alamat XRP Ledger Anda',lbl_email:'Email Anda (privat)',hint_email:'Hanya untuk konfirmasi pendaftaran.',lbl_amount:'Jumlah BRIK yang ingin dibeli',amt_select:'Pilih jumlah',lbl_type:'Jenis investor',type_retail:'Investor ritel',type_inst:'Institusional / Family office',type_dev:'Pengembang properti',type_lp:'Penyedia likuiditas',chk_terms:'Saya menerima <a href="#">Syarat dan Ketentuan</a>.',chk_public:'Saya menerima alamat dompet saya didaftarkan secara publik dalam bentuk tersembunyi.',btn_register:'Daftar ke Daftar Putih',btn_registering:'Mendaftar...',verify_title:'VERIFIKASI POSISI ANDA',lbl_verify:'Masukkan alamat dompet',hint_verify:'Masukkan alamat lengkap untuk memeriksa status.',btn_verify:'Periksa pendaftaran saya',howto_title:'CARA KERJA',how1_title:'Daftarkan dompet XRPL Anda',how1_desc:'Kirim alamat Anda — lebih awal = posisi lebih baik.',how2_title:'Alamat Anda terdaftar secara publik',how2_desc:'Disembunyikan: 5 karakter pertama + 5 terakhir terlihat.',how3_title:'Selesaikan KYC saat peluncuran IDO',how3_desc:'Dompet dalam daftar putih menyelesaikan KYC/AML dan mendapat alokasi BRIK prioritas.',list_title:'DAFTAR PUTIH PUBLIK',list_search:'Cari berdasarkan alamat tersembunyi...',list_showing:'Menampilkan',list_of:'dari',list_wallets:'dompet',list_export:'↓ Ekspor CSV',th_num:'#',th_wallet:'Dompet (tersembunyi)',th_network:'Jaringan',th_brik:'BRIK dipesan',th_date:'Terdaftar',th_status:'Status',status_confirmed:'DIKONFIRMASI',status_pending:'KYC TERTUNDA',empty:'Belum ada dompet terdaftar. Jadilah yang pertama!',empty_search:'Dompet tidak ditemukan.',page_prev:'← Sebelum',page_next:'Berikutnya →',page_of:'Halaman',success_title:'Anda ada di daftar putih!',success_desc:'Dompet Anda berhasil didaftarkan.',success_pos_lbl:'Posisi Anda dalam daftar putih',btn_another:'Daftarkan dompet lain',vf_found:'✓ Dompet ditemukan di daftar putih',vf_pos:'Posisi',vf_brik:'BRIK dipesan',vf_eur:'EUR berkomitmen',vf_date:'Terdaftar',vf_status:'Status',vf_pending:'KYC tertunda',vf_masked:'Alamat publik tersembunyi:',vf_not:'✗ Dompet tidak ditemukan',vf_not_desc:'Alamat ini tidak terdaftar di daftar putih BRIDEX.',disclaimer:'Pendaftaran tidak menjamin alokasi IDO. Bukan saran keuangan.',err_wallet:'Alamat tidak valid. Harus diawali "r", 25-50 karakter.',err_exists:'Dompet ini sudah terdaftar.',err_email:'Masukkan email yang valid.',err_amount:'Pilih jumlah BRIK.',err_terms:'Terima syarat dan ketentuan.',err_public:'Terima pendaftaran publik tersembunyi.',hint_amount:'Tidak mengikat. Membantu perencanaan distribusi.'}
+};
+
+let currentLang = localStorage.getItem('bridex_lang') || 'en';
+
+function toggleLang() {
+  const btn = document.getElementById('lang-btn');
+  const dd = document.getElementById('lang-dropdown');
+  btn.classList.toggle('open');
+  dd.classList.toggle('open');
+}
+
+function setLang(code) {
+  currentLang = code;
+  localStorage.setItem('bridex_lang', code);
+  const L = LANGS[code];
+  // Update button
+  document.getElementById('current-flag').textContent = L.flag;
+  document.getElementById('current-lang').textContent = L.name;
+  // RTL support
+  document.documentElement.dir = L.dir;
+  document.documentElement.lang = code;
+  // Active state
+  document.querySelectorAll('.lang-option').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('onclick') === `setLang('${code}')`);
+  });
+  // Close dropdown
+  document.getElementById('lang-btn').classList.remove('open');
+  document.getElementById('lang-dropdown').classList.remove('open');
+  // Apply translations
+  applyTranslations(L);
+}
+
+function t(key) {
+  return LANGS[currentLang]?.[key] || LANGS.en[key] || key;
+}
+
+function applyTranslations(L) {
+  const set = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+  const setText = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
+  const setAttr = (id, attr, val) => { const el = document.getElementById(id); if(el) el.setAttribute(attr, val); };
+  const setLabel = (forId, text) => { const el = document.querySelector(`label[for="${forId}"]`); if(el) el.textContent = text; };
+  const qText = (sel, text) => { const el = document.querySelector(sel); if(el) el.textContent = text; };
+  const qHtml = (sel, html) => { const el = document.querySelector(sel); if(el) el.innerHTML = html; };
+
+  // Nav
+  qText('[data-i18n="nav_back"]', L.nav_back);
+  // Hero
+  qHtml('.wl-badge', `<span class="live-dot"></span> ${L.wl_badge}`);
+  qHtml('.hero h1', L.hero_h1);
+  qText('.hero > p:first-of-type', L.hero_p);
+  qText('.hero-note', L.hero_note);
+  // Stats
+  const statLabels = document.querySelectorAll('.stat-l');
+  if(statLabels[0]) statLabels[0].textContent = L.stat_wallets;
+  if(statLabels[1]) statLabels[1].textContent = L.stat_brik;
+  if(statLabels[2]) statLabels[2].textContent = L.stat_eur;
+  if(statLabels[3]) statLabels[3].textContent = L.stat_pct;
+  // Form card
+  qText('#form-card .card-title', L.form_title);
+  qText('#form-card .card-tag', L.form_step);
+  const labels = document.querySelectorAll('.form-label');
+  if(labels[0]) labels[0].textContent = L.lbl_wallet;
+  if(labels[1]) labels[1].textContent = L.lbl_email;
+  if(labels[2]) labels[2].textContent = L.lbl_amount;
+  if(labels[3]) labels[3].textContent = L.lbl_type;
+  setAttr('inp-wallet','placeholder','rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+  set('hint-wallet', L.hint_wallet);
+  const hints = document.querySelectorAll('.form-hint');
+  if(hints[1]) hints[1].textContent = L.hint_email;
+  if(hints[2]) hints[2].textContent = L.hint_amount;
+  // Select options
+  const sel = document.getElementById('inp-amount');
+  if(sel) sel.options[0].text = L.amt_select;
+  const sel2 = document.getElementById('inp-type');
+  if(sel2) { sel2.options[0].text = L.type_retail; sel2.options[1].text = L.type_inst; sel2.options[2].text = L.type_dev; sel2.options[3].text = L.type_lp; }
+  // Checkboxes
+  const chkLabels = document.querySelectorAll('.form-check label');
+  if(chkLabels[0]) chkLabels[0].innerHTML = L.chk_terms;
+  if(chkLabels[1]) chkLabels[1].innerHTML = L.chk_public;
+  // Submit btn
+  const btn = document.getElementById('btn-register');
+  if(btn && !btn.disabled) btn.innerHTML = `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> ${L.btn_register}`;
+  // Verify
+  qText('#verify-result ~ * .card-title', L.verify_title);
+  const vCardTitle = document.querySelector('.verify-card .card-title');
+  if(vCardTitle) vCardTitle.textContent = L.verify_title;
+  const vLabels = document.querySelectorAll('.verify-card .form-label');
+  if(vLabels[0]) vLabels[0].textContent = L.lbl_verify;
+  const vHint = document.querySelector('.verify-card .form-hint');
+  if(vHint) vHint.textContent = L.hint_verify;
+  const vBtn = document.querySelector('.verify-card button');
+  if(vBtn) vBtn.textContent = L.btn_verify;
+  // List
+  qText('.list-card .card-title', L.list_title);
+  setAttr('search-input','placeholder',L.list_search);
+  qText('.export-btn', L.list_export);
+  // Table headers
+  const ths = document.querySelectorAll('.list-table th');
+  const thKeys = ['th_num','th_wallet','th_network','th_brik','th_date','th_status'];
+  ths.forEach((th,i) => { if(L[thKeys[i]]) th.textContent = L[thKeys[i]]; });
+  // Page buttons
+  set('btn-prev', L.page_prev);
+  set('btn-next', L.page_next);
+  // Re-render list to translate status pills
+  renderList(filteredData);
+}
+
+// Override status text in renderList
+const _origRenderList = renderList;
+window.renderList = function(data) {
+  _origRenderList(data);
+  // Override status/empty text after render
+  const body = document.getElementById('list-body');
+  if(!body) return;
+  body.querySelectorAll('.status-confirmed').forEach(el => el.textContent = t('status_confirmed'));
+  body.querySelectorAll('.status-pending').forEach(el => el.textContent = t('status_pending'));
+  const empty = body.querySelector('.empty-state div + *') || body.querySelector('.empty-state');
+  if(empty && body.querySelector('.empty-state')) {
+    const txt = body.querySelector('.empty-state').textContent;
+    if(txt.includes('No wallets registered') || txt.includes('No wallets found')) {
+      // handled below
+    }
+  }
+};
+
+// Close dropdown on outside click
+document.addEventListener('click', e => {
+  if(!e.target.closest('#lang-switcher')) {
+    document.getElementById('lang-btn')?.classList.remove('open');
+    document.getElementById('lang-dropdown')?.classList.remove('open');
+  }
+});
+
+// Apply on load
+document.addEventListener('DOMContentLoaded', () => {
+  setLang(currentLang);
 });
 </script>
 </body>
