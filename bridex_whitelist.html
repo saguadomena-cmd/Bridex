@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRIDEX — Whitelist Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F3BA2F;--gold-dk:#C99B2A;--gold-lt:#FFD15C;
+  --gold-dim:rgba(243,186,47,0.08);--gold-bdr:rgba(243,186,47,0.18);
+  --bg:#07090C;--bg2:#0D1117;--bg3:#141B23;--bg4:#1C2530;
+  --border:rgba(255,255,255,0.04);--border2:rgba(255,255,255,0.08);
+  --text:#EDF0F3;--text2:#8B95A1;--text3:#4A5568;
+  --green:#00C9A7;--red:#FF5A7A;--blue:#4A9EFF;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(243,186,47,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(243,186,47,0.02) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes count{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;display:inline-block;flex-shrink:0;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(7,9,12,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-sq{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.logo-name{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:500;letter-spacing:2px;color:var(--text);}
+.logo-name b{color:var(--gold);}
+.nav-back{font-size:12px;color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
+.nav-back:hover{color:var(--gold);}
+
+/* TICKER */
+.ticker{height:28px;overflow:hidden;display:flex;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);}
+.ticker-track{display:flex;white-space:nowrap;animation:ticker 30s linear infinite;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.ti{display:inline-flex;align-items:center;gap:5px;padding:0 16px;color:var(--text3);border-right:1px solid var(--border);}
+.ti-v{color:var(--text2);}
+.ti-g{color:var(--gold);}
+
+/* HERO */
+.hero{max-width:900px;margin:0 auto;padding:60px 40px 40px;text-align:center;position:relative;z-index:1;animation:fadeUp .7s ease both;}
+.wl-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:1px solid var(--gold-bdr);border-radius:100px;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+.hero h1{font-size:clamp(36px,5vw,60px);font-weight:800;letter-spacing:-2px;line-height:1.02;margin-bottom:12px;}
+.hero h1 span{color:var(--gold);}
+.hero p{font-size:14px;color:var(--text2);line-height:1.8;max-width:560px;margin:0 auto 12px;}
+.hero-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;}
+
+/* STATS ROW */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:12px;overflow:hidden;max-width:900px;margin:32px auto;position:relative;z-index:1;}
+.stat{background:var(--bg2);padding:20px 16px;text-align:center;}
+.stat-v{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--gold);animation:count .5s ease both;}
+.stat-l{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+
+/* MAIN LAYOUT */
+.main{max-width:900px;margin:0 auto;padding:0 40px 80px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+
+/* REGISTRATION FORM */
+.form-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden;}
+.card-header{background:var(--bg3);padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--text);letter-spacing:1px;}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--gold-dim);border:1px solid var(--gold-bdr);color:var(--gold);padding:2px 8px;border-radius:3px;letter-spacing:1px;}
+.card-body{padding:24px;}
+.form-group{margin-bottom:18px;}
+.form-label{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;display:block;font-family:'JetBrains Mono',monospace;}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--text);font-family:'JetBrains Mono',monospace;transition:border-color .2s;outline:none;}
+.form-input:focus{border-color:var(--gold-bdr);}
+.form-input::placeholder{color:var(--text3);}
+.form-input.error{border-color:var(--red);}
+.form-input.success{border-color:var(--green);}
+.form-hint{font-size:10px;color:var(--text3);margin-top:5px;line-height:1.5;}
+.form-hint.err{color:var(--red);}
+.form-hint.ok{color:var(--green);}
+.form-select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--text);font-family:'JetBrains Mono',monospace;outline:none;cursor:pointer;appearance:none;}
+.form-select:focus{border-color:var(--gold-bdr);}
+.form-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.form-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold);margin-top:2px;cursor:pointer;flex-shrink:0;}
+.form-check label{font-size:11px;color:var(--text2);line-height:1.6;cursor:pointer;}
+.form-check label a{color:var(--gold);text-decoration:none;}
+.btn-submit{width:100%;background:var(--gold);border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:700;color:var(--bg);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-submit:hover:not(:disabled){background:var(--gold-lt);transform:translateY(-1px);box-shadow:0 8px 24px rgba(243,186,47,.22);}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.spinner{width:16px;height:16px;border:2px solid rgba(7,9,12,.3);border-top:2px solid var(--bg);border-radius:50%;animation:spin .6s linear infinite;}
+
+/* SUCCESS STATE */
+.success-card{background:var(--bg2);border:1px solid rgba(0,201,167,.2);border-radius:16px;padding:32px 24px;text-align:center;display:none;animation:slideIn .4s ease both;}
+.success-icon{width:56px;height:56px;background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.success-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.success-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px;}
+.success-wallet{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-bdr);border-radius:6px;padding:8px 14px;margin-bottom:16px;word-break:break-all;text-align:left;}
+.success-pos{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:500;color:var(--green);margin-bottom:4px;}
+.success-pos-lbl{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
+
+/* VERIFY FORM */
+.verify-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden;}
+.verify-result{margin-top:14px;padding:14px;background:var(--bg3);border-radius:8px;display:none;animation:slideIn .3s ease both;}
+.verify-found{border:1px solid rgba(0,201,167,.2);}
+.verify-not{border:1px solid rgba(255,90,122,.2);}
+.vr-title{font-size:12px;font-weight:700;margin-bottom:8px;}
+.vr-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text2);margin-bottom:5px;}
+.vr-row span:last-child{font-family:'JetBrains Mono',monospace;color:var(--text);}
+.vr-wallet{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);word-break:break-all;margin-top:8px;line-height:1.6;}
+
+/* PUBLIC LIST */
+.list-card{grid-column:1/-1;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden;}
+.list-controls{padding:16px 20px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.search-input{flex:1;min-width:180px;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--text);font-family:'JetBrains Mono',monospace;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--gold-bdr);}
+.search-input::placeholder{color:var(--text3);}
+.list-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);white-space:nowrap;}
+.list-count span{color:var(--gold);}
+.export-btn{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:6px 12px;cursor:pointer;transition:all .2s;letter-spacing:1px;}
+.export-btn:hover{border-color:var(--gold-bdr);color:var(--gold);}
+
+.list-table{width:100%;border-collapse:collapse;}
+.list-table th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;padding:10px 20px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3);}
+.list-table th:last-child{text-align:right;}
+.list-table td{padding:12px 20px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.list-table tr:last-child td{border-bottom:none;}
+.list-table tr:hover td{background:rgba(255,255,255,.015);}
+.td-pos{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);width:40px;}
+.td-wallet{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);}
+.td-wallet .masked{color:var(--text3);}
+.td-wallet .visible{color:var(--text);}
+.td-type{font-size:10px;padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
+.type-xrpl{background:rgba(243,186,47,.08);color:var(--gold);border:1px solid var(--gold-bdr);}
+.type-eth{background:rgba(74,158,255,.08);color:var(--blue);border:1px solid rgba(74,158,255,.18);}
+.td-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);}
+.td-amount{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);text-align:right;}
+.td-status{text-align:right;}
+.status-pill{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
+.status-confirmed{background:rgba(0,201,167,.1);color:var(--green);border:1px solid rgba(0,201,167,.2);}
+.status-pending{background:rgba(243,186,47,.08);color:var(--gold);border:1px solid var(--gold-bdr);}
+
+.empty-state{padding:48px;text-align:center;color:var(--text3);font-size:13px;}
+.empty-state div{font-family:'JetBrains Mono',monospace;font-size:32px;margin-bottom:12px;opacity:.3;}
+
+/* DISCLAIMER */
+.disclaimer{grid-column:1/-1;background:rgba(243,186,47,.04);border:1px solid var(--gold-bdr);border-radius:10px;padding:14px 18px;font-size:11px;color:var(--text3);line-height:1.7;display:flex;gap:10px;align-items:flex-start;}
+.disclaimer svg{flex-shrink:0;margin-top:1px;}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--border);background:var(--bg3);}
+.page-info{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);}
+.page-btns{display:flex;gap:6px;}
+.page-btn{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:5px 10px;cursor:pointer;transition:all .2s;letter-spacing:1px;}
+.page-btn:hover:not(:disabled){border-color:var(--gold-bdr);color:var(--gold);}
+.page-btn:disabled{opacity:.4;cursor:default;}
+.page-btn.active{background:var(--gold-dim);border-color:var(--gold-bdr);color:var(--gold);}
+
+@media(max-width:700px){
+  nav{padding:0 20px;}
+  .hero{padding:40px 20px 24px;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .main{grid-template-columns:1fr;padding:0 20px 60px;}
+  .list-card{grid-column:auto;}
+  .disclaimer{grid-column:auto;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="bridex_v4.html">
+    <div class="logo-sq">
+      <svg width="16" height="16" viewBox="0 0 64 64">
+        <rect x="4" y="6" width="24" height="22" rx="4" fill="#07090C"/>
+        <rect x="36" y="6" width="24" height="22" rx="4" fill="#07090C"/>
+        <rect x="4" y="34" width="56" height="24" rx="4" fill="#07090C"/>
+      </svg>
+    </div>
+    <span class="logo-name"><b>BRID</b>EX</span>
+  </a>
+  <a class="nav-back" href="bridex_v4.html">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to main site
+  </a>
+</nav>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ti"><span class="live-dot" style="margin-right:4px;"></span><span>WHITELIST</span><span class="ti-v ti-g">OPEN</span></span>
+    <span class="ti"><span>BRIK TOKEN</span><span class="ti-v">IDO 0.10 – 0.50 EUR</span></span>
+    <span class="ti"><span>SUPPLY</span><span class="ti-v">21,000,000 BRIK</span></span>
+    <span class="ti"><span>MIN. INVESTMENT</span><span class="ti-v ti-g">100 EUR / 1 BRIK</span></span>
+    <span class="ti"><span>BLOCKCHAIN</span><span class="ti-v">XRP LEDGER</span></span>
+    <span class="ti"><span>KYC/AML</span><span class="ti-v">REQUIRED AT IDO</span></span>
+    <span class="ti"><span>WHITELIST</span><span class="ti-v ti-g">OPEN</span></span>
+    <span class="ti"><span>BRIK TOKEN</span><span class="ti-v">IDO 0.10 – 0.50 EUR</span></span>
+    <span class="ti"><span>SUPPLY</span><span class="ti-v">21,000,000 BRIK</span></span>
+    <span class="ti"><span>MIN. INVESTMENT</span><span class="ti-v ti-g">100 EUR / 1 BRIK</span></span>
+    <span class="ti"><span>BLOCKCHAIN</span><span class="ti-v">XRP LEDGER</span></span>
+    <span class="ti"><span>KYC/AML</span><span class="ti-v">REQUIRED AT IDO</span></span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wl-badge"><span class="live-dot"></span> Whitelist — IDO 2026</div>
+  <h1>Register your wallet.<br><span>Secure your BRIK.</span></h1>
+  <p>Register your XRPL wallet address to join the BRIDEX IDO whitelist. Your wallet will be publicly listed — partially masked for security — so you can verify your participation at any time.</p>
+  <p class="hero-note">All addresses are public · Partially masked · Verifiable by any user</p>
+</div>
+
+<div class="stats" id="stats-row">
+  <div class="stat"><div class="stat-v" id="stat-total">0</div><div class="stat-l">Wallets registered</div></div>
+  <div class="stat"><div class="stat-v" id="stat-brik">0</div><div class="stat-l">BRIK reserved</div></div>
+  <div class="stat"><div class="stat-v" id="stat-eur">0€</div><div class="stat-l">EUR committed</div></div>
+  <div class="stat"><div class="stat-v" id="stat-pct">0%</div><div class="stat-l">Of IDO allocation</div></div>
+</div>
+
+<div class="main">
+
+  <!-- REGISTRATION FORM -->
+  <div>
+    <div class="form-card" id="form-card">
+      <div class="card-header">
+        <span class="card-title">REGISTER WALLET</span>
+        <span class="card-tag">STEP 1 OF 2</span>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">XRPL Wallet address</label>
+          <input class="form-input" id="inp-wallet" type="text" placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" maxlength="50" autocomplete="off" spellcheck="false">
+          <div class="form-hint" id="hint-wallet">Must start with "r" — your XRP Ledger address (Xaman wallet)</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your email (private, never shown)</label>
+          <input class="form-input" id="inp-email" type="email" placeholder="your@email.com" autocomplete="off">
+          <div class="form-hint">Used only to confirm your registration. Never shared publicly.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">BRIK amount you intend to buy</label>
+          <select class="form-select" id="inp-amount">
+            <option value="">Select amount</option>
+            <option value="1">1 BRIK — 100 EUR (minimum)</option>
+            <option value="5">5 BRIK — 500 EUR</option>
+            <option value="10">10 BRIK — 1,000 EUR</option>
+            <option value="50">50 BRIK — 5,000 EUR</option>
+            <option value="100">100 BRIK — 10,000 EUR</option>
+            <option value="500">500 BRIK — 50,000 EUR</option>
+            <option value="1000">1,000 BRIK — 100,000 EUR (whale)</option>
+          </select>
+          <div class="form-hint">Non-binding. Helps us plan IDO distribution.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Investor type</label>
+          <select class="form-select" id="inp-type">
+            <option value="retail">Retail investor</option>
+            <option value="institutional">Institutional / Family office</option>
+            <option value="developer">Real estate developer</option>
+            <option value="lp">Liquidity provider</option>
+          </select>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="chk-terms">
+          <label for="chk-terms">I understand that registering on the whitelist does not guarantee allocation. Final participation requires KYC/AML verification at IDO launch. I accept the <a href="#">Terms & Conditions</a>.</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="chk-public">
+          <label for="chk-public">I accept that my wallet address will be listed publicly in masked form (e.g. <code style="color:var(--gold);font-size:10px;">rXXX...XXXX</code>) on the BRIDEX whitelist page, verifiable by any user.</label>
+        </div>
+        <button class="btn-submit" id="btn-register" onclick="registerWallet()">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Register on Whitelist
+        </button>
+      </div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-card" id="success-card">
+      <div class="success-icon">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#00C9A7" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="success-title">You're on the whitelist!</div>
+      <div class="success-desc">Your wallet has been registered successfully. Keep this page bookmarked to verify your position at any time.</div>
+      <div class="success-wallet" id="success-wallet-display"></div>
+      <div class="success-pos" id="success-pos">#1</div>
+      <div class="success-pos-lbl">Your position in the whitelist</div>
+      <div style="margin-top:20px;">
+        <button onclick="registerAnother()" style="background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:8px;padding:10px 20px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;width:100%;">Register another wallet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFY YOUR WALLET -->
+  <div>
+    <div class="verify-card">
+      <div class="card-header">
+        <span class="card-title">VERIFY YOUR POSITION</span>
+        <span class="card-tag">LOOKUP</span>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">Enter your wallet address</label>
+          <input class="form-input" id="inp-verify" type="text" placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" autocomplete="off" spellcheck="false">
+          <div class="form-hint">Enter your full wallet address to check your registration status and position.</div>
+        </div>
+        <button onclick="verifyWallet()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.3px;" onmouseover="this.style.borderColor='var(--gold-bdr)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text)'">
+          Check my registration
+        </button>
+        <div class="verify-result" id="verify-result"></div>
+      </div>
+    </div>
+
+    <!-- INFO BOX -->
+    <div style="margin-top:16px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden;">
+      <div class="card-header">
+        <span class="card-title">HOW IT WORKS</span>
+      </div>
+      <div class="card-body" style="padding:20px;">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);">1</div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">Register your XRPL wallet</div><div style="font-size:11px;color:var(--text3);line-height:1.6;">Submit your address to secure your whitelist position. Earlier = better position.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);">2</div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">Your address is listed publicly</div><div style="font-size:11px;color:var(--text3);line-height:1.6;">Masked for security: first 4 + last 4 characters visible. Anyone can verify their own participation.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);">3</div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">Complete KYC at IDO launch</div><div style="font-size:11px;color:var(--text3);line-height:1.6;">When the IDO opens, whitelisted wallets complete KYC/AML and receive priority allocation of BRIK tokens.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PUBLIC WHITELIST -->
+  <div class="list-card">
+    <div class="card-header" style="padding:16px 20px;">
+      <span class="card-title">PUBLIC WHITELIST — ALL REGISTERED WALLETS</span>
+      <span class="card-tag">LIVE</span>
+    </div>
+    <div class="list-controls">
+      <input class="search-input" id="search-input" type="text" placeholder="Search by masked address..." oninput="filterList(this.value)">
+      <span class="list-count">Showing <span id="showing-count">0</span> of <span id="total-count">0</span> wallets</span>
+      <button class="export-btn" onclick="exportCSV()">↓ Export CSV</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Wallet (masked)</th>
+            <th>Network</th>
+            <th>BRIK reserved</th>
+            <th>Registered</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="list-body">
+          <tr><td colspan="6" class="empty-state"><div>🧱</div>No wallets registered yet. Be the first!</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination" style="display:none;">
+      <span class="page-info" id="page-info">Page 1 of 1</span>
+      <div class="page-btns">
+        <button class="page-btn" id="btn-prev" onclick="prevPage()">← Prev</button>
+        <button class="page-btn" id="btn-next" onclick="nextPage()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#F3BA2F" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    <span>Registering on the whitelist does not guarantee IDO allocation. Wallet addresses are displayed in masked form (first 4 + last 4 characters) for security. Full addresses are never displayed publicly. Registration is non-binding — final participation requires KYC/AML verification at IDO launch. BRIDEX is not responsible for incorrect wallet addresses submitted by users. Always verify your own address using the lookup tool above. This is not financial advice.</span>
+  </div>
+
+</div>
+
+<script>
+const STORAGE_KEY = 'bridex_whitelist_v1';
+const IDO_ALLOCATION = 5250000;
+const PER_PAGE = 15;
+let currentPage = 1;
+let filteredData = [];
+
+function maskWallet(addr) {
+  if (!addr || addr.length < 10) return addr;
+  const first = addr.slice(0, 5);
+  const last = addr.slice(-5);
+  const mid = '·'.repeat(8);
+  return `${first}${mid}${last}`;
+}
+
+function getWallets() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveWallets(list) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch {}
+}
+
+function formatDate(ts) {
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'});
+}
+
+function updateStats() {
+  const list = getWallets();
+  const totalBrik = list.reduce((s, w) => s + (w.amount || 0), 0);
+  const totalEur = totalBrik * 100;
+  const pct = IDO_ALLOCATION > 0 ? Math.min(100, (totalBrik / IDO_ALLOCATION * 100)).toFixed(1) : 0;
+  document.getElementById('stat-total').textContent = list.length.toLocaleString();
+  document.getElementById('stat-brik').textContent = totalBrik.toLocaleString();
+  document.getElementById('stat-eur').textContent = totalEur >= 1000000 ? (totalEur/1000000).toFixed(1)+'M€' : totalEur >= 1000 ? (totalEur/1000).toFixed(0)+'K€' : totalEur+'€';
+  document.getElementById('stat-pct').textContent = pct + '%';
+}
+
+function renderList(data) {
+  const body = document.getElementById('list-body');
+  const start = (currentPage - 1) * PER_PAGE;
+  const end = start + PER_PAGE;
+  const page = data.slice(start, end);
+
+  document.getElementById('showing-count').textContent = data.length;
+  document.getElementById('total-count').textContent = getWallets().length;
+
+  if (data.length === 0) {
+    body.innerHTML = '<tr><td colspan="6" class="empty-state"><div>🧱</div>No wallets found.</td></tr>';
+    document.getElementById('pagination').style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.ceil(data.length / PER_PAGE);
+  document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById('btn-prev').disabled = currentPage <= 1;
+  document.getElementById('btn-next').disabled = currentPage >= totalPages;
+  document.getElementById('pagination').style.display = data.length > PER_PAGE ? 'flex' : 'none';
+
+  body.innerHTML = page.map((w, i) => {
+    const pos = start + i + 1;
+    const masked = maskWallet(w.wallet);
+    const typeClass = w.network === 'XRPL' ? 'type-xrpl' : 'type-eth';
+    const statusClass = w.status === 'confirmed' ? 'status-confirmed' : 'status-pending';
+    const statusText = w.status === 'confirmed' ? 'CONFIRMED' : 'PENDING KYC';
+    return `
+      <tr>
+        <td class="td-pos">${pos}</td>
+        <td class="td-wallet">
+          <span class="visible">${masked.slice(0,5)}</span><span class="masked">${'·'.repeat(8)}</span><span class="visible">${masked.slice(-5)}</span>
+        </td>
+        <td><span class="td-type ${typeClass}">${w.network || 'XRPL'}</span></td>
+        <td class="td-amount">+${(w.amount || 0).toLocaleString()} BRIK</td>
+        <td class="td-date">${formatDate(w.ts)}</td>
+        <td class="td-status"><span class="status-pill ${statusClass}">${statusText}</span></td>
+      </tr>`;
+  }).join('');
+}
+
+function filterList(query) {
+  currentPage = 1;
+  const list = getWallets();
+  if (!query.trim()) {
+    filteredData = [...list];
+  } else {
+    const q = query.toLowerCase();
+    filteredData = list.filter(w => maskWallet(w.wallet).toLowerCase().includes(q));
+  }
+  renderList(filteredData);
+}
+
+function prevPage() { if (currentPage > 1) { currentPage--; renderList(filteredData); } }
+function nextPage() {
+  const totalPages = Math.ceil(filteredData.length / PER_PAGE);
+  if (currentPage < totalPages) { currentPage++; renderList(filteredData); }
+}
+
+function validateWallet(addr) {
+  return addr && addr.startsWith('r') && addr.length >= 25 && addr.length <= 50 && /^[a-zA-Z0-9]+$/.test(addr);
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+async function registerWallet() {
+  const wallet = document.getElementById('inp-wallet').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const amountRaw = document.getElementById('inp-amount').value;
+  const terms = document.getElementById('chk-terms').checked;
+  const pub = document.getElementById('chk-public').checked;
+  const btn = document.getElementById('btn-register');
+
+  // Reset hints
+  document.getElementById('inp-wallet').className = 'form-input';
+  document.getElementById('hint-wallet').className = 'form-hint';
+  document.getElementById('hint-wallet').textContent = 'Must start with "r" — your XRP Ledger address (Xaman wallet)';
+
+  if (!validateWallet(wallet)) {
+    document.getElementById('inp-wallet').className = 'form-input error';
+    document.getElementById('hint-wallet').className = 'form-hint err';
+    document.getElementById('hint-wallet').textContent = 'Invalid wallet address. Must start with "r" and be 25-50 characters.';
+    return;
+  }
+  if (!validateEmail(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  if (!amountRaw) { alert('Please select a BRIK amount.'); return; }
+  if (!terms) { alert('Please accept the Terms & Conditions.'); return; }
+  if (!pub) { alert('Please accept that your masked wallet will be publicly listed.'); return; }
+
+  const list = getWallets();
+  const exists = list.find(w => w.wallet.toLowerCase() === wallet.toLowerCase());
+  if (exists) {
+    document.getElementById('inp-wallet').className = 'form-input error';
+    document.getElementById('hint-wallet').className = 'form-hint err';
+    document.getElementById('hint-wallet').textContent = 'This wallet is already registered on the whitelist.';
+    return;
+  }
+
+  // Loading state
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Registering...';
+  await new Promise(r => setTimeout(r, 1200));
+
+  const entry = {
+    wallet,
+    email,
+    amount: parseInt(amountRaw),
+    network: 'XRPL',
+    ts: Date.now(),
+    status: 'pending'
+  };
+  list.push(entry);
+  saveWallets(list);
+
+  // Show success
+  document.getElementById('form-card').style.display = 'none';
+  const sc = document.getElementById('success-card');
+  sc.style.display = 'block';
+  document.getElementById('success-wallet-display').textContent = maskWallet(wallet) + '\n(Your full address is stored securely)';
+  document.getElementById('success-pos').textContent = '#' + list.length;
+
+  // Refresh list
+  filteredData = [...getWallets()];
+  currentPage = Math.ceil(filteredData.length / PER_PAGE);
+  renderList(filteredData);
+  updateStats();
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Register on Whitelist';
+}
+
+function verifyWallet() {
+  const input = document.getElementById('inp-verify').value.trim();
+  const result = document.getElementById('verify-result');
+  if (!input) { result.style.display = 'none'; return; }
+  const list = getWallets();
+  const idx = list.findIndex(w => w.wallet.toLowerCase() === input.toLowerCase());
+  if (idx >= 0) {
+    const w = list[idx];
+    result.style.display = 'block';
+    result.className = 'verify-result verify-found';
+    result.innerHTML = `
+      <div class="vr-title" style="color:var(--green);">✓ Wallet found on whitelist</div>
+      <div class="vr-row"><span>Position</span><span>#${idx + 1}</span></div>
+      <div class="vr-row"><span>BRIK reserved</span><span>${w.amount.toLocaleString()} BRIK</span></div>
+      <div class="vr-row"><span>EUR committed</span><span>${(w.amount * 100).toLocaleString()} EUR</span></div>
+      <div class="vr-row"><span>Registered</span><span>${formatDate(w.ts)}</span></div>
+      <div class="vr-row"><span>Status</span><span style="color:var(--gold)">Pending KYC</span></div>
+      <div class="vr-wallet">Masked public address: ${maskWallet(w.wallet)}</div>`;
+  } else {
+    result.style.display = 'block';
+    result.className = 'verify-result verify-not';
+    result.innerHTML = `
+      <div class="vr-title" style="color:var(--red);">✗ Wallet not found</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;">This address is not registered on the BRIDEX whitelist. Register above to secure your position.</div>`;
+  }
+}
+
+function registerAnother() {
+  document.getElementById('success-card').style.display = 'none';
+  document.getElementById('form-card').style.display = 'block';
+  document.getElementById('inp-wallet').value = '';
+  document.getElementById('inp-email').value = '';
+  document.getElementById('inp-amount').value = '';
+  document.getElementById('chk-terms').checked = false;
+  document.getElementById('chk-public').checked = false;
+}
+
+function exportCSV() {
+  const list = getWallets();
+  if (!list.length) { alert('No wallets to export.'); return; }
+  const header = 'Position,Masked Wallet,Network,BRIK Reserved,EUR Committed,Date,Status';
+  const rows = list.map((w, i) =>
+    `${i+1},"${maskWallet(w.wallet)}",${w.network},${w.amount},${w.amount*100},${formatDate(w.ts)},${w.status}`
+  );
+  const csv = [header, ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'bridex_whitelist.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  filteredData = [...getWallets()];
+  renderList(filteredData);
+  updateStats();
+
+  // Verify on Enter
+  document.getElementById('inp-verify').addEventListener('keydown', e => {
+    if (e.key === 'Enter') verifyWallet();
+  });
+  document.getElementById('inp-wallet').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('inp-email').focus();
+  });
+});
+</script>
+</body>
+</html>
